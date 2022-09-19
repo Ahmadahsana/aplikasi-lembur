@@ -23,7 +23,23 @@ class Hr extends CI_Controller
         $user = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $id = ($user['nik']);
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['lembur'] = $this->m_lembur->get_form_lembur('5');
+        $status = ['5', '4'];
+        $data['lembur'] = $this->m_lembur->get_form_lembur_hr($status);
+
+        $peserta = [];
+
+        foreach ($data['lembur'] as $d) {
+
+            $hasil = $this->m_lembur->get_peserta_hr($d['id'], $status);
+            foreach ($hasil as $h) {
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
 
         $data['title'] = 'Daftar lemburan';
 
@@ -46,8 +62,22 @@ class Hr extends CI_Controller
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $status = 6;
 
-
         $data['lembur'] = $this->m_lembur->get_form_hr($status);
+
+        $peserta = [];
+
+        foreach ($data['lembur'] as $d) {
+
+            $hasil = $this->m_lembur->get_peserta($d['id'], $d['status']);
+            foreach ($hasil as $h) {
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
 
         $data['title'] = 'Sudah diinput';
 
@@ -72,10 +102,10 @@ class Hr extends CI_Controller
         $id = ($user['nik']);
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
 
-        $status = 5;
+        $status = [5, 4];
 
         $data['form'] = $this->m_lembur->get_form($idform);
-        $data['detail'] = $this->m_lembur->get_detail($idform, $status);
+        $data['detail'] = $this->m_lembur->get_detail_hr($idform, $status);
 
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);

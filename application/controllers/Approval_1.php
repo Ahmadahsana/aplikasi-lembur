@@ -31,7 +31,8 @@ class Approval_1 extends CI_Controller
             $departemen[] = $cd['id_departemen'];
         };
 
-
+        // var_dump($departemen);
+        // die;
         // $id = ($user['nik']);
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         // $data['lembur'] = $this->m_lembur->get_form_lembur('0');
@@ -40,9 +41,20 @@ class Approval_1 extends CI_Controller
         // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
         $data['lembur_departemen'] = $this->m_lembur->get_form_lembur_departemen('0', $departemen);
 
-        // $data['lembur'] = $this->m_lembur->get_form_lembur('3');
+        $peserta = [];
 
+        foreach ($data['lembur_departemen'] as $d) {
 
+            $hasil = $this->m_lembur->get_peserta($d['id'], '0');
+            foreach ($hasil as $h) {
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
 
         $data['title'] = 'Permintaan lembur dept';
 
@@ -77,9 +89,20 @@ class Approval_1 extends CI_Controller
 
         $data['lembur'] = $this->m_lembur->get_form_approve_departemen($status, $departemen);
 
-        // var_dump($status);
-        // var_dump($data['lembur']);
-        // die;
+        $peserta = [];
+
+        foreach ($data['lembur'] as $d) {
+
+            $hasil = $this->m_lembur->get_peserta($d['id'], $d['status']);
+            foreach ($hasil as $h) {
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
 
         $data['title'] = 'Riwayat approve dept';
 

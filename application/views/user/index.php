@@ -10,23 +10,23 @@
                         <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= set_value('tanggal') ?>" required>
                         <small class="text-danger"><?= form_error('tanggal') ?></small>
                     </div>
-                    <div class="form-group col-md-3">
+                    <!-- <div class="form-group col-md-3">
                         <label for="mulai">Jam mulai</label>
                         <input type="time" class="form-control" id="timemulai" name="timemulai" value="<?= set_value('timemulai') ?>" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="selesai">Jam selesai</label>
                         <input type="time" class="form-control" id="timeselesai" name="timeselesai" value="<?= set_value('timeselesai') ?>" required>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="no_order">NO Order</label>
                     <input type="text" class="form-control" id="no_order" name="no_order" value="<?= set_value('no_order') ?>">
-                </div>
-                <div class="form-group">
+                </div> -->
+                <!-- <div class="form-group">
                     <label for="alasan">Alasan lembur</label>
                     <textarea class="form-control" id="alasan" name="alasan" rows="2" required><?= set_value('alasan') ?></textarea>
-                </div>
+                </div> -->
 
                 <div class="row justify-content-between">
                     <div class="form-group col-md-4">
@@ -42,14 +42,19 @@
                 <table class="table table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">No</th>
+                            <th scope="col" style="width: 20px;">No</th>
                             <th scope="col">Nama</th>
-                            <th scope="col">NIK</th>
-                            <th scope="col">Bagian</th>
+                            <!-- <th scope="col">NIK</th> -->
+                            <th scope="col" style="width: 10%;">Jam mulai</th>
+                            <th scope="col" style="width: 10%;">Jam selesai</th>
+                            <th scope="col" style="width: 10%;">Bagian</th>
+                            <th scope="col" style="width: 10%;">No Order</th>
+                            <th scope="col">Alasan</th>
                             <th scope="col">Opsi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="number">
+
 
                         <!-- <tr> -->
                         <!-- <td>1</td>

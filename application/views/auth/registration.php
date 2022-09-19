@@ -118,6 +118,12 @@
                                     <label class="float-label">Nama Lengkap</label>
                                     <small class="text-danger"><?= form_error('name') ?></small>
                                 </div>
+                                <div id="tampilcari" class="form-group form-primary position-relative">
+                                    <ul class="list-group position-absolute" style="z-index: 9999; top: 0; width: 100%;">
+                                        <li class="list-group-item">An item</li>
+                                        <li class="list-group-item">A second item</li>
+                                    </ul>
+                                </div>
                                 <div class="form-group form-primary">
                                     <input type="text" name="username" id="username" class="form-control" value="<?= set_value('username') ?>">
                                     <span class="form-bar"></span>
@@ -216,6 +222,8 @@
                 }
             });
         });
+
+        $('#tampilcari').addClass('d-none')
     </script>
 </body>
 

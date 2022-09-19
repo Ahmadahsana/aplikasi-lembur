@@ -7,24 +7,35 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>ID form</th>
-                            <th>Nama</th>
-                            <th style="width: 400px;">Alasan</th>
+                            <th>Tanggal</th>
+                            <th>Nama pembuat</th>
+                            <th>Peserta lembur</th>
                             <th>Status</th>
                             <th>Opsi</th>
                         </tr>
                     </thead>
+                    <!-- <?php var_dump($lembur_departemen) ?> -->
 
                     <tbody>
-                        <?php $no = 1;
+                        <?php
+                        $no = 1;
                         foreach ($lembur as $l) : ?>
 
                             <tr>
-                                <td></td>
-                                <td><?= $l['id'] ?></td>
+                                <td><?= $no++ ?></td>
+                                <td><?= $l['tgl_lembur'] ?></td>
                                 <td><?= $l['pembuat'] ?></td>
-                                <td><?= $l['alasan'] ?></td>
-                                <td><span class="badge badge-pill badge-danger"><?= $l['nama_status'] ?></span></td>
+                                <td>
+                                    <?php
+
+                                    foreach ($peserta as $p) {
+                                        if ($p['id'] == $l['id']) {
+                                            echo $p['peserta'];
+                                            echo '</br>';
+                                        }
+                                    } ?>
+                                </td>
+                                <td><span class="badge badge-pill badge-<?= $l['warna'] ?>"><?= $l['nama_status'] ?></span></td>
                                 <td><a href="<?= base_url('approval_ppc/detail/') . $l['id'] ?>" title="lihat detail"><button class="btn btn-info"><i class="fa fa-eye"></i></button></a></td>
                             </tr>
                         <?php endforeach ?>

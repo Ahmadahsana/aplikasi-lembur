@@ -24,6 +24,20 @@ class Approval_ppc extends CI_Controller
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $data['lembur'] = $this->m_lembur->get_form_lembur('1');
 
+        $peserta = [];
+
+        foreach ($data['lembur'] as $d) {
+
+            $hasil = $this->m_lembur->get_peserta($d['id'], '1');
+            foreach ($hasil as $h) {
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
 
         $data['title'] = 'Permintaan lembur';
 
@@ -50,6 +64,21 @@ class Approval_ppc extends CI_Controller
 
         // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
         $data['lembur'] = $this->m_lembur->get_form_approve_ppc($status);
+
+        $peserta = [];
+
+        foreach ($data['lembur'] as $d) {
+
+            $hasil = $this->m_lembur->get_peserta($d['id'], $d['status']);
+            foreach ($hasil as $h) {
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
 
         $data['title'] = 'Riwayat approve';
 

@@ -119,7 +119,7 @@
                             <img width="20%" src="<?= base_url('assets/images/pura.png') ?>"><br>
                             <div class="kecil">PT. Purabarutama Div. eng</div>
                         </td>
-                        <td rowspan="3" colspan="4" style="text-align: center;">SURAT PERINTAH LEMBUR <br> <?= $form['tgl_lembur'] ?></td>
+                        <td rowspan="3" colspan="4" style="text-align: center;">SURAT PERINTAH LEMBUR <br> <?= date("d-M-Y", strtotime($form['tgl_lembur'])); ?></td>
                         <!-- <td>3</td>
                         <td>4</td>
                         <td>5</td>
@@ -198,8 +198,8 @@
                             <td><?= $d['bagian'] ?></td>
                             <td><?= $d['jam_mulai'] ?></td>
                             <td><?= $d['jam_selesai'] ?></td>
-                            <td><?= $form['no_order'] ?></td>
-                            <td><?= $form['alasan'] ?></td>
+                            <td><?= $d['no_order'] ?></td>
+                            <td><?= $d['alasan'] ?></td>
                         </tr>
                     <?php endforeach ?>
 
@@ -219,7 +219,7 @@
                         <td>PPC</td>
                         <td>Efisiensi</td>
                         <td>Cost Control</td>
-                        <td></td>
+                        <td>General Manager</td>
                     </tr>
                     <tr>
                         <td>1</td>

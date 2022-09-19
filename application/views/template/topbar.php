@@ -48,11 +48,11 @@
                             </a>
                             <ul class="show-notification profile-notification">
 
-                                <li class="waves-effect waves-light">
+                                <!-- <li class="waves-effect waves-light">
                                     <a href="<?= base_url('user/profile') ?>">
                                         <i class="ti-user"></i> Profile
                                     </a>
-                                </li>
+                                </li> -->
 
                                 <li class="waves-effect waves-light">
                                     <a href="<?= base_url('auth/logout') ?>">

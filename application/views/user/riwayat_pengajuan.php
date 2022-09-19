@@ -10,7 +10,7 @@
                             <th>ID form</th>
                             <th>Tanggal</th>
                             <th>Nama</th>
-                            <th style="width: 400px;">Alasan</th>
+                            <!-- <th style="width: 400px;">Alasan</th> -->
                             <th>Status</th>
                             <th>Opsi</th>
                         </tr>
@@ -26,8 +26,8 @@
                                 <td><?= $l['id'] ?></td>
                                 <td><?= date('d-m-Y', strtotime($l['tgl_lembur'])) ?></td>
                                 <td><?= $l['pembuat'] ?></td>
-                                <td><?= $l['alasan'] ?></td>
-                                <td><span class="badge badge-pill badge-danger"><?= $l['nama_status'] ?></span></td>
+                                <!-- <td><?= $l['alasan'] ?></td> -->
+                                <td><span class="badge badge-pill badge-<?= $l['warna'] ?>"><?= $l['nama_status'] ?></span></td>
                                 <td><a href="<?= base_url('form/detail_pengajuan/') . $l['id'] . '/' . $l['status'] ?>" title="lihat detail"><button class="btn btn-info"><i class="fa fa-eye"></i>Detail</button></a></td>
                             </tr>
                         <?php endforeach ?>

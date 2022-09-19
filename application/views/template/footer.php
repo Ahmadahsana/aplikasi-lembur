@@ -94,9 +94,10 @@
                         datapegawaitemp.push({
                             id: v.id,
                             nama: v.Nm_Karyawan,
-                            nik: v.NIK
+                            nik: v.NIK,
+                            departemen: v.Kd_Bagian
                         })
-                        $('#tampilcarinama').append(`<a href="#" class="listcarinama" data-namapegawai="` + v.Nm_Karyawan + `" data-idpegawai="` + v.NIK + `">` + v.Nm_Karyawan + `</a><br><hr>`)
+                        $('#tampilcarinama').append(`<a href="#" class="listcarinama" data-namapegawai="` + v.Nm_Karyawan + `" data-idpegawai="` + v.NIK + `">` + v.Nm_Karyawan + `  |  ` + v.NIK + `  |  ` + v.Kd_Bagian + `</a><br><hr>`)
 
 
                     });
@@ -117,13 +118,17 @@
         console.log(idpegawai)
         console.log(namapegawai)
 
-        isi = `<tr>
-                            <td></td>
-                            <td><input type="text" class="form-control" id="nama" name="nama[]" value="${namapegawai}" readonly></td>
-                            <td><input type="text" class="form-control" id="nik" name="nik[]" value="${idpegawai}" readonly></td>
-                            <td><input type="text" class="form-control" id="bagian" name="bagian[]" value=""></td>
-                            <td><button type="button" class="btn btn-danger btn-sm mr-3" id="btnhapus"><i class="fa fa-trash"></i> Hapus</button></td>
-                            </tr>`
+        isi = `<tr class="urut">
+                <td style="width: 20px;" class="angka"></td>
+                <td><input type="text" class="form-control" id="nama" name="nama[]" value="${namapegawai}" readonly> <input type="text" class="form-control d-none" id="nik" name="nik[]" value="${idpegawai}" readonly></td>
+                
+                <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="" required></td>
+                <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="" required></td>
+                <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="" required></td>
+                <td><input type="text" class="form-control" id="no_order" name="no_order[]" value=""></td>
+                <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="" required></td>
+                <td><button type="button" class="btn btn-danger btn-sm mr-3" id="btnhapus"><i class="fa fa-trash" required></i></button></td>
+                </tr> `
         $(tbody).append(isi);
         event.preventDefault();
 

@@ -38,15 +38,15 @@
     <link href="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet" />
 
     <style type="text/css">
-        tbody {
+        tbody .number {
             counter-reset: rowNumber;
         }
 
-        tbody tr {
+        tbody tr .urut {
             counter-increment: rowNumber;
         }
 
-        tbody tr td:first-child::before {
+        tbody tr td:first-child::before .angka {
             content: counter(rowNumber);
             min-width: 1em;
             margin-right: 0.5em;
@@ -59,6 +59,11 @@
         }
 
         /* tambahan */
+
+        .table.table-sm td,
+        .table.table-sm th {
+            padding: 0.6rem 0.5rem;
+        }
     </style>
 
 </head>

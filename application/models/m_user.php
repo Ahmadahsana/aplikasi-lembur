@@ -81,4 +81,26 @@ class M_user extends CI_Model
         $hasil = $this->db->delete('tb_grup_role', array('id' => $id));
         echo json_encode($hasil);
     }
+
+    function cari_departemen($departemen)
+    {
+        $this->db->select('*');
+        $this->db->from('departemen');
+        $this->db->where('departemen', $departemen);
+        return $this->db->get()->row_array();
+    }
+
+    function cari_jabatan($nik, $iddepartemen)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_grup_jabatan');
+        $this->db->where('nik', $nik);
+        $this->db->where('id_departemen', $iddepartemen);
+        return $this->db->get()->row_array();
+    }
+
+    function tambah_jabatan($data_jabatan)
+    {
+        $this->db->insert('tb_grup_jabatan', $data_jabatan);
+    }
 }

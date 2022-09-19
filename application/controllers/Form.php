@@ -164,7 +164,7 @@ class Form extends CI_Controller
         $data['form'] = $this->m_lembur->get_form_print($idform); //tak joinkan ke user
         $data['title'] = $idform;
 
-        $pembuat = $data['form']['nik'];
+        // $pembuat = $data['form']['nik'];
         $user = $this->m_lembur->get_departemen_form($idform);
 
         $departemen_form = $user[0]['id_departemen'];

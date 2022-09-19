@@ -223,6 +223,23 @@ class Admin extends CI_Controller
             'is_active' => $aktif
         ];
 
+        // mencari id departemen
+        $caridepartemen = $this->m_user->cari_departemen($departemen);
+        $iddepartemen = $caridepartemen['id'];
+
+        // mencari di tb_grup_jabatan
+        $carijabatan = $this->m_user->cari_jabatan($nik, $iddepartemen);
+
+        if ($carijabatan == null) {
+            $data_jabatan = [
+                'nik' => $nik,
+                'id_jabatan' => 0,
+                'id_departemen' => $iddepartemen
+            ];
+
+            $this->m_user->tambah_jabatan($data_jabatan);
+        }
+
         if ($role != null) {
             $data_role = [
                 'id_role' => $role,

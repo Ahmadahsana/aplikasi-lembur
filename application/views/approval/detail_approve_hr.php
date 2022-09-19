@@ -9,12 +9,12 @@
                     </div>
                 </div>
 
-                <div class="form-group row">
+                <!-- <div class="form-group row">
                     <label for="alasan" class="col-sm-2 col-form-label">alasan</label>
                     <div class="col-sm-10">
                         <textarea type="text" class="form-control" id="alasan" name="alasan" cols="2" rows="2" readonly> <?= $form['alasan'] ?> </textarea>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row justify-content-end mr-4">
                     <a href="<?= base_url('form/print/') . $data[0] . '/' . $data[1] ?>" class="btn btn-success"><i class="fa fa-print"></i> Print</a>
@@ -26,9 +26,11 @@
                             <th scope="col">No</th>
                             <th scope="col">Nama</th>
                             <th scope="col">NIK</th>
-                            <th scope="col">Bagian</th>
+                            <th scope="col">No order</th>
                             <th scope="col" style="width: 140px;">Jam mulai</th>
                             <th scope="col" style="width: 140px;">Jam selesai</th>
+                            <th scope="col">Bagian</th>
+                            <th scope="col">Alasan</th>
                             <!-- <th scope="col">Opsi</th> -->
 
                         </tr>
@@ -39,12 +41,14 @@
                         ?>
                             <tr>
 
-                                <td scope="row"></td>
+                                <th scope="row"><?= $no++ ?></th>
                                 <td><input type="text" name="nama[]" class="form-control" value="<?= $d['nama_user'] ?>" readonly></td>
                                 <td><input type="text" name="nik[]" class="form-control" value="<?= $d['nik'] ?>" readonly></td>
-                                <td><input type="text" name="bagian[]" class="form-control" value="<?= $d['bagian'] ?>" readonly></td>
-                                <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="<?= $d['jam_mulai'] ?>"></td>
-                                <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="<?= $d['jam_selesai'] ?>"></td>
+                                <td><input type="text" name="no_order[]" class="form-control" value="<?= $d['no_order'] ?>" readonly></td>
+                                <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="<?= $d['jam_mulai'] ?>" readonly></td>
+                                <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="<?= $d['jam_selesai'] ?>" readonly></td>
+                                <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="<?= $d['bagian'] ?>" readonly></td>
+                                <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="<?= $d['alasan'] ?>" readonly></td>
                                 <!-- <td></td> -->
                             </tr>
                         <?php endforeach ?>

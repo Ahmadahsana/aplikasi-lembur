@@ -31,6 +31,7 @@
                                     <?php echo $useredit['departemen'] ?> <span class="badge badge-light">X</span>
                                 </button>
                             </div> -->
+                            <!-- <?php var_dump($useredit) ?> -->
                             <div class="col-sm-10">
                                 <select name="departemen" id="departemen" class="custom-select">
                                     <?php foreach ($departemen as $d) : ?>
@@ -41,6 +42,7 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-2 col-form-label">Role</label>
                             <div class="col-sm-9">
