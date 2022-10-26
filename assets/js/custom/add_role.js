@@ -59,3 +59,40 @@ function remove(event) {
 
 }
 
+function hapus(params) {
+    console.log(params);
+    let yakin = confirm(`Apakah anda yakin ingin menghapus departemen dari user`);
+
+    if (yakin) {
+        let departemenUser = document.querySelector(`#hapusdept${params}`)
+        console.log(departemenUser);
+        departemenUser.parentElement.remove();
+
+        // ini ajax cuy
+
+        var xhr = new XMLHttpRequest();
+        var url = base_url + "admin/hapus_departemen?id=" + params;
+
+        var data = JSON.stringify({
+            "id": 'params'
+        });
+
+        xhr.open("get", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onload = function () {
+            console.log(this.responseText);
+        };
+
+        xhr.send(data);
+        return false;
+    }
+}
+
+let tambahDepartemen = document.querySelector('#adddepartemen');
+let dept = document.querySelector('.departemen');
+
+tambahDepartemen.addEventListener('click', function (e) {
+    console.log('hai');
+    dept.toggleAttribute("hidden");
+
+});

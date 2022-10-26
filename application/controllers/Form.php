@@ -165,11 +165,14 @@ class Form extends CI_Controller
         $data['title'] = $idform;
 
         // $pembuat = $data['form']['nik'];
-        $user = $this->m_lembur->get_departemen_form($idform);
+        $user = $this->m_lembur->get_departemen_form_cetak($idform);
 
-        $departemen_form = $user[0]['id_departemen'];
+        // var_dump($user);
+        // $departemen_form = $user[0]['id_departemen'];
         // var_dump($departemen_form);
-        $data['departemen'] = $this->m_lembur->get_departemen($departemen_form);
+        // $data['departemen'] = $this->m_lembur->get_departemen($departemen_form);
+        $data['departemen'] = $user;
+        $data['data_ttd'] = $this->m_user->get_ttd();
 
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
         $this->load->view('laporan_pdf1', $data);

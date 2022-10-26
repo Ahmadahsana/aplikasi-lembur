@@ -5,7 +5,7 @@
 
 
     <!-- <h1>edit profile</h1> -->
-    <?= $this->session->flashdata('message'); ?>
+
 
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
@@ -13,6 +13,7 @@
                 <div class="card p-3 py-4">
                     <!-- <div class="text-center"> <img src="<?= base_url('assets/img/profile/') . $user['image'] ?>" width="100" class="rounded-circle"> </div> -->
                     <div class="text-center mt-3">
+                        <?= $this->session->flashdata('message'); ?>
 
                         <!-- <h5 class="mt-2 mb-0"><?= $user['name'] ?></h5> -->
 

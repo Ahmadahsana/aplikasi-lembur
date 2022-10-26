@@ -29,6 +29,13 @@
 <script src="<?= base_url('assets/'); ?>datatables/jquery.dataTables.min.js"></script>
 <script src="<?= base_url('assets/'); ?>datatables/dataTables.bootstrap4.min.js"></script>
 
+<script src="<?= base_url('assets/'); ?>datatables/js/dataTables.buttons.min.js"></script>
+<script src="<?= base_url('assets/'); ?>datatables/js/vfs_fonts.js"></script>
+<script src="<?= base_url('assets/'); ?>datatables/js/jszip.min.js"></script>
+<script src="<?= base_url('assets/'); ?>datatables/js/buttons.print.min.js"></script>
+<script src="<?= base_url('assets/'); ?>datatables/js/pdfmake.min.js"></script>
+<script src="<?= base_url('assets/'); ?>datatables/js/buttons.html5.min.js"></script>
+
 <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
 
 
@@ -42,11 +49,22 @@
     echo '<script src="' . base_url() . 'assets/js/custom/dodol.js"></script>';
 } ?>
 
+<!-- <script type="text/javascript">
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+        });
+    });
+</script> -->
 
 <script>
-    $(document).ready(function() {
-        console.log('ready');
-    });
+    // var todayDate = new Date().toISOString().slice(0, 10);
+    // console.log(todayDate);
+
+    // $(document).ready(function() {
+    //     console.log('ready');
+    // });
     $('.form-check-input').on('click', function() {
         const menu_id = $(this).data('menu');
         const role_id = $(this).data('role');
@@ -97,7 +115,7 @@
                             nik: v.NIK,
                             departemen: v.Kd_Bagian
                         })
-                        $('#tampilcarinama').append(`<a href="#" class="listcarinama" data-namapegawai="` + v.Nm_Karyawan + `" data-idpegawai="` + v.NIK + `">` + v.Nm_Karyawan + `  |  ` + v.NIK + `  |  ` + v.Kd_Bagian + `</a><br><hr>`)
+                        $('#tampilcarinama').append(`<a href="#" class="listcarinama" data-departemen="${v.Kd_Bagian}" data-statuskar="${v.Kd_Unit}" data-namapegawai="` + v.Nm_Karyawan + `" data-idpegawai="` + v.NIK + `">` + v.Nm_Karyawan + `  |  ` + v.NIK + `  |  ` + v.Kd_Bagian + `</a><br><hr>`)
 
 
                     });
@@ -114,6 +132,8 @@
     $('#tampilcarinama').on('click', '.listcarinama', function(event) {
         let idpegawai = $(this).data('idpegawai')
         let namapegawai = $(this).data('namapegawai')
+        let departemen_pegawai = $(this).data('departemen')
+        let unit = $(this).data('statuskar')
 
         console.log(idpegawai)
         console.log(namapegawai)
@@ -127,7 +147,11 @@
                 <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="" required></td>
                 <td><input type="text" class="form-control" id="no_order" name="no_order[]" value=""></td>
                 <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="" required></td>
-                <td><button type="button" class="btn btn-danger btn-sm mr-3" id="btnhapus"><i class="fa fa-trash" required></i></button></td>
+                <td><button type="button" class="btn btn-danger btn-sm mr-3" id="btnhapus"><i class="fa fa-trash" required></i></button>
+                <input type="text" class="form-control" id="status_kar" name="status_kar[]" value="${unit}" hidden>
+                <input type="text" class="form-control" id="departemen" name="departemen[]" value="${departemen_pegawai}" hidden>
+                </td>
+                
                 </tr> `
         $(tbody).append(isi);
         event.preventDefault();

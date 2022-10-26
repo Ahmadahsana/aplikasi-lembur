@@ -66,6 +66,15 @@ class M_user extends CI_Model
         return $this->db->get()->result_array();
     }
 
+    public function get_departemen_edit($nik)
+    {
+        $this->db->select('tb_grup_jabatan.id, departemen.departemen');
+        $this->db->from('tb_grup_jabatan');
+        $this->db->join('departemen', 'departemen.id = tb_grup_jabatan.id_departemen');
+        $this->db->where('nik', $nik);
+        return $this->db->get()->result_array();
+    }
+
     function get_role($role)
     {
         $this->db->select('*');
@@ -79,6 +88,13 @@ class M_user extends CI_Model
         // $this->db->where('tb_grup_role.id', $id);
         // $hasil = $this->db->delete('tb_grup_role');
         $hasil = $this->db->delete('tb_grup_role', array('id' => $id));
+        echo json_encode($hasil);
+    }
+
+    function hapus_departemen($id)
+    {
+
+        $hasil = $this->db->delete('tb_grup_jabatan', array('id' => $id));
         echo json_encode($hasil);
     }
 
@@ -102,5 +118,26 @@ class M_user extends CI_Model
     function tambah_jabatan($data_jabatan)
     {
         $this->db->insert('tb_grup_jabatan', $data_jabatan);
+    }
+
+    function get_role_pimpinan()
+    {
+        $this->db->select('*');
+        $this->db->from('view_role');
+        $this->db->where('id_role !=', 2);
+        $this->db->where('id_role !=', 1);
+        return $this->db->get()->result_array();
+    }
+
+    function tambah_ttd($data)
+    {
+        $this->db->insert('ttd', $data);
+    }
+
+    function get_ttd()
+    {
+        $this->db->select('*');
+        $this->db->from('ttd');
+        return $this->db->get()->result_array();
     }
 }

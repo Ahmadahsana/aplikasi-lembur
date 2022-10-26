@@ -37,6 +37,8 @@
     <link href="<?= base_url('assets/'); ?>datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet" />
 
+    <!-- <link href="<?= base_url('assets/'); ?>datatables/css/buttons.dataTables.min.css" rel="stylesheet"> -->
+
     <style type="text/css">
         tbody .number {
             counter-reset: rowNumber;
@@ -59,10 +61,16 @@
         }
 
         /* tambahan */
-
-        .table.table-sm td,
+        /* .table.table-sm td,
         .table.table-sm th {
             padding: 0.6rem 0.5rem;
+        } */
+    </style>
+
+    <style>
+        .page td {
+            padding: 0;
+            margin: 0;
         }
     </style>
 

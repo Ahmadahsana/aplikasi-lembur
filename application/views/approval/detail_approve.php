@@ -84,7 +84,7 @@
                                     <td><input type="text" name="no_order[]" class="form-control" value="<?= $t['no_order'] ?>"></td>
                                     <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="<?= $t['jam_mulai'] ?>" readonly></td>
                                     <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="<?= $t['jam_selesai'] ?>" readonly></td>
-                                    <td><input type="text" name="bagian[]" class="form-control" value="<?= $d['bagian'] ?>" readonly></td>
+                                    <td><input type="text" name="bagian[]" class="form-control" value="<?= $t['bagian'] ?>" readonly></td>
                                     <td><input type="text" name="nama[]" class="form-control" value="<?= $t['keterangan'] ?>" readonly></td>
                                     <!-- <td></td> -->
                                 </tr>

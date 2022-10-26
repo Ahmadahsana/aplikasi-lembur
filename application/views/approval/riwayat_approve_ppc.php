@@ -8,7 +8,7 @@
                             <th>No</th>
                             <!-- <th>ID form</th> -->
                             <th>Tanggal</th>
-                            <th>Nama</th>
+                            <th>Nama pembuat</th>
                             <th style="width: 400px;">Peserta lembur</th>
                             <th>Status</th>
                             <th>Opsi</th>

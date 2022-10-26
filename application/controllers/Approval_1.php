@@ -87,7 +87,9 @@ class Approval_1 extends CI_Controller
             $departemen[] = $cd['id_departemen'];
         };
 
-        $data['lembur'] = $this->m_lembur->get_form_approve_departemen($status, $departemen);
+        $data['lembur'] = $this->m_lembur->get_form_approve_departemen1($status, $departemen);
+
+        // var_dump($departemen);
 
         $peserta = [];
 
@@ -146,15 +148,19 @@ class Approval_1 extends CI_Controller
 
     public function approve($id)
     {
-        $get_departemen_form = $this->m_lembur->get_departemen_form($id);
-        $departemen_form = $get_departemen_form[0]['id_departemen'];
+        // $get_departemen_form = $this->m_lembur->get_departemen_form($id);
+        // $departemen_form = $get_departemen_form[0]['id_departemen'];
 
-        if ($departemen_form == '2') {
+        $departemen = $this->session->userdata('departemen');
+
+        if ($departemen == 'Produksi') {
             $status_form = 1;
         } else {
             $status_form = 2;
         }
 
+        // var_dump($status_form);
+        // die;
 
         $result = array();
         $r = 0;

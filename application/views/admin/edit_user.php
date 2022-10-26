@@ -32,16 +32,36 @@
                                 </button>
                             </div> -->
                             <!-- <?php var_dump($useredit) ?> -->
-                            <div class="col-sm-10">
-                                <select name="departemen" id="departemen" class="custom-select">
-                                    <?php foreach ($departemen as $d) : ?>
-                                        <option value="<?= $d['departemen'] ?>" <?php if ($d['departemen'] == $useredit['departemen']) {
-                                                                                    echo 'selected';
-                                                                                } ?>><?= $d['departemen'] ?></option>
-                                    <?php endforeach ?>
-                                </select>
+                            <!-- <?php var_dump($departemen) ?> -->
+                            <div class="col-sm-9">
+
+                                <?php foreach ($departemen_user as $d) : ?>
+                                    <div class="btn-group mb-1" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-sm btn-secondary"><?= $d['departemen'] ?></button>
+                                        <button type="button" id="hapusdept<?= $d['id'] ?>" class="btn btn-sm btn-dark " onclick="hapus(<?= $d['id'] ?>)">X</button>
+                                    </div>
+                                <?php endforeach ?>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" id="adddepartemen" class="btn btn-sm btn-primary mb-1 ">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
                         </div>
+                        <div class="departemen" hidden>
+                            <div class="form-group row ">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label"></label>
+                                <div class="col-sm-10">
+                                    <select name="departemen" id="departemen" class="custom-select">
+                                        <option disabled selected>tambah departemen</option>
+                                        <?php foreach ($departemen as $d) : ?>
+                                            <option value="<?= $d['departemen'] ?>"><?= $d['departemen'] ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-2 col-form-label">Role</label>
@@ -52,7 +72,6 @@
                                         <?php echo $u['role'] ?> <span id="hapus" class="badge badge-light klik hapus">X</span>
                                     </button> -->
                                     <div class="btn-group mb-1" role="group" aria-label="Basic example">
-
                                         <button type="button" class="btn btn-sm btn-secondary"><?php echo $u['alias'] ?></button>
                                         <button type="button" id="hapus<?php echo $u['id']  ?>" class="btn btn-sm btn-dark " onclick="remove(<?php echo $u['id']  ?>)">X</button>
                                     </div>
@@ -79,12 +98,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="row">
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-10">
-                                    <a class="btn btn-sm btn-success mb-3 text-light tombol">Tambah</a>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-2 col-form-label">Aktif?</label>

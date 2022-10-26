@@ -69,6 +69,20 @@
 
                 <?php endforeach ?>
 
+                <div class="pcoded-navigation-label">User</div>
+                <ul class="pcoded-item pcoded-left-item">
+
+
+                    <!-- <li class="active"> -->
+                    <li class="<?php  ?>">
+                        <a href="<?= base_url('user/ganti_password') ?>" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"><i class="ti-key"></i><b></b></span>
+                            <span class="pcoded-mtext">Ganti password</span>
+                            <span class="pcoded-mcaret"></span>
+                        </a>
+                    </li>
+
+                </ul>
 
             </div>
         </nav>

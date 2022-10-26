@@ -25,12 +25,15 @@ class User extends CI_Controller
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
         // $user = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
-        $user = $this->session->userdata('username');
+        $user = $this->session->userdata('name');
 
 
         $tanggal = $this->input->post('tanggal');
         $alasan = $this->input->post('alasan');
         $nik = $this->session->userdata('nik');
+
+        // var_dump($nik);
+        // die;
         // $jam_mulai = $this->input->post('timemulai');
         // $jam_selesai = $this->input->post('timeselesai');
         $bagian = $this->input->post('bagian');
@@ -71,6 +74,8 @@ class User extends CI_Controller
                     'nik' => $_POST['nik'][$key],
                     'jam_mulai' => $_POST['jam_mulai'][$key],
                     'jam_selesai' => $_POST['jam_selesai'][$key],
+                    'departemen' => $_POST['departemen'][$key],
+                    'status_kar' => $_POST['status_kar'][$key],
                     'bagian' => $bagian[$key],
                     'no_order' => $_POST['no_order'][$key],
                     'alasan' => $_POST['alasan'][$key],
@@ -118,6 +123,53 @@ class User extends CI_Controller
         $this->load->view('template/topbar', $data);
         $this->load->view('template/sidebar', $data);
         $this->load->view('user/menu_awal', $data);
+        $this->load->view('template/footer', $data);
+    }
+
+    public function report()
+    {
+        $db2 = $this->load->database('database_kedua', TRUE);
+        $role = $this->session->userdata['role_id'];
+
+        $data['menu'] = $this->m_lembur->cari_menu($role);
+        $data['role'] = $this->session->userdata['role_id'];
+        $data['title'] = 'Report lembur';
+        $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+        $tgl_mulai = $this->input->post('tgl_mulai');
+        $tgl_akhir = $this->input->post('tgl_akhir');
+
+        if ($tgl_mulai == null) {
+            $data['lembur'] = $this->m_lembur->get_form_lembur_report();
+        } else {
+            $data['lembur'] = $this->m_lembur->get_form_lembur_report_filter($tgl_mulai, $tgl_akhir);
+        }
+
+        $peserta = [];
+
+        foreach ($data['lembur'] as $d) {
+
+            $hasil = $this->m_lembur->get_peserta($d['id'], '6');
+            foreach ($hasil as $h) {
+                // var_dump($hasil);
+                // die;
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user'],
+                    'nik' => $h['nik'],
+                    'departemen' => $h['departemen'],
+                    'status_kar' => $h['status_kar'],
+                    'jam_mulai' => $h['jam_mulai'],
+                    'jam_selesai' => $h['jam_selesai']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/topbar', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('user/report', $data);
         $this->load->view('template/footer', $data);
     }
 
@@ -241,10 +293,11 @@ class User extends CI_Controller
 
         $db2 = $this->load->database('database_kedua', TRUE);
         $data['userini'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
-        $user = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
+        // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
+        // $user = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
+        $user = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $id = ($user['nik']);
-        // $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+        $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
 
 
         $data['title'] = 'Ganti password';
@@ -301,7 +354,7 @@ class User extends CI_Controller
         $db2 = $this->load->database('database_kedua', TRUE);
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $user = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $nama = $this->session->userdata('username');
+        $nama = $this->session->userdata('nik');
         // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
         $data['lembur'] = $this->m_lembur->get_riwayat_pengajuan($nama);
 
@@ -319,7 +372,7 @@ class User extends CI_Controller
         $nama = $this->input->post('carinama');
         // $nama = 'NAID';
         $string_nama = "'%" . $nama . "%'";
-        $query = 'SELECT NIK , "Nm_Karyawan" , "Kd_Jabatan" ,"Kd_Bagian"  FROM PAYROLLWKS."Karyawan" WHERE "IsActive" = 1 AND "Nm_Karyawan"  LIKE ' . $string_nama;
+        $query = 'SELECT NIK , "Nm_Karyawan" , "Kd_Jabatan" ,"Kd_Bagian", "Kd_Unit" FROM PAYROLLWKS."Karyawan" WHERE "IsActive" = 1 AND "Nm_Karyawan"  LIKE ' . $string_nama;
         $hasil = $this->OD->query($query);
         // $cari = $this->m_lembur->get_nama($nama);
         echo json_encode($hasil);

@@ -88,6 +88,7 @@ class Menu extends CI_Controller
         $role = $this->session->userdata['role_id'];
         $data['menu'] = $this->m_lembur->cari_menu($role);
         $data['role'] = $this->session->userdata['role_id'];
+        $data['menu_edit'] = $this->m_lembur->cari_menu_admin();
 
         $db2 = $this->load->database('database_kedua', TRUE);
         $this->form_validation->set_rules('title', 'Title', 'required');

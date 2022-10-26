@@ -206,34 +206,82 @@
                 </table>
                 <br>
 
-                <table class="ok" style="margin-top: 40px; text-align: center; text-transform: capitalize;">
+                <table class="" style="margin-top: 40px; text-align: center; text-transform: capitalize; border: none;">
                     <tr>
-                        <td>Hormat Kami</td>
-                        <td>Mengetahui</td>
-                        <td>Mengetahui</td>
-                        <td>Menyetujui</td>
-                        <td>Menyetujui</td>
+                        <td style="border: none;">Hormat Kami</td>
+                        <?php if ($departemen[0]['id_dept'] == '2') {
+                            echo '<td style="border: none;">Mengetahui</td>';
+                        } ?>
+
+                        <td style="border: none;">Mengetahui</td>
+                        <td style="border: none;">Menyetujui</td>
+                        <td style="border: none;">Menyetujui</td>
+                    </tr>
+
+                    <tr>
+                        <td style="border: none;">Kabag <?php echo $departemen[0]['departemen'] ?></td>
+                        <?php if ($departemen[0]['id_dept'] == '2') {
+                            echo '<td style="border: none;">PPC</td>';
+                        } ?>
+
+                        <td style="border: none;">Efisiensi</td>
+                        <td style="border: none;">Cost Control</td>
+                        <td style="border: none;">General Manager</td>
+                    </tr>
+
+                    <tr>
+                        <td style="border: none;">
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['dept']) : ?>
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
+
+
+                        <?php if ($departemen[0]['id_dept'] == '2') : ?>
+                            <td style="border: none;">
+                                <?php foreach ($data_ttd as $d) : ?>
+                                    <?php if ($d['username'] == $form['ppc']) : ?>
+                                        <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                            </td>
+                        <?php endif ?>
+
+                        <td style="border: none;">
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['efisiensi']) : ?>
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
+                        <td style="border: none;">
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['cc']) : ?>
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
+                        <td style="border: none;">
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['manager']) : ?>
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Kabag <?php echo $departemen['departemen'] ?></td>
-                        <td>PPC</td>
-                        <td>Efisiensi</td>
-                        <td>Cost Control</td>
-                        <td>General Manager</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td><?= $form['dept'] ?></td>
-                        <td><?= $form['ppc'] ?></td>
-                        <td><?= $form['efisiensi'] ?></td>
-                        <td><?= $form['cc'] ?></td>
-                        <td><?= $form['manager'] ?></td>
+                        <td style="border: none;"><?= $form['dept'] ?></td>
+                        <?php if ($departemen[0]['id_dept'] == '2') {
+                            echo '<td style="border: none;">' . $form['ppc'] . '</td>';
+                        } ?>
+
+
+                        <!-- <td><?= $form['ppc'] ?></td> -->
+                        <td style="border: none;"><?= $form['efisiensi'] ?></td>
+                        <td style="border: none;"><?= $form['cc'] ?></td>
+                        <td style="border: none;"><?= $form['manager'] ?></td>
                     </tr>
                 </table>
 

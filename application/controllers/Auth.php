@@ -14,6 +14,10 @@ class Auth extends CI_Controller
 
     public function index()
     {
+        if ($this->session->userdata('username')) {
+            redirect('user/menu_awal');
+        }
+
         $this->form_validation->set_rules('username', 'Username', 'required|trim');
         $this->form_validation->set_rules('password', 'Password', 'required|trim');
         if ($this->form_validation->run() == false) {
@@ -48,7 +52,12 @@ class Auth extends CI_Controller
             $role[] = $c['id_role'];
         };
 
+        if ($cari_role == null) {
+            $role = ['2'];
+        }
 
+        // var_dump($user);
+        // die;
 
         //jika datanya ada di database
         if ($user) {
@@ -59,7 +68,9 @@ class Auth extends CI_Controller
                 if ($password == $user['password']) {
                     $data = [
                         'username' => $user['username'],
+                        'name' => $user['name'],
                         'nik' => $user['nik'],
+                        'departemen' => $user['departemen'],
                         'role_id' => $role
                     ];
                     $this->session->set_userdata($data);
@@ -201,5 +212,17 @@ class Auth extends CI_Controller
 
         $hasil = $this->OD->query($query);
         echo json_encode($hasil);
+    }
+
+    function cari_nama()
+    {
+        $nama = $this->input->post('nama');
+        // $nama = 'NAID';
+        $string_nama = "'%" . $nama . "%'";
+        $query = 'SELECT NIK , "Nm_Karyawan" , "Kd_Jabatan" ,"Kd_Bagian"  FROM PAYROLLWKS."Karyawan" WHERE "IsActive" = 1 AND "Nm_Karyawan"  LIKE ' . $string_nama;
+        $hasil = $this->OD->query($query);
+        // $cari = $this->m_lembur->get_nama($nama);
+        echo json_encode($hasil);
+        // var_dump($hasil);
     }
 }

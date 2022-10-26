@@ -119,9 +119,8 @@
                                     <small class="text-danger"><?= form_error('name') ?></small>
                                 </div>
                                 <div id="tampilcari" class="form-group form-primary position-relative">
-                                    <ul class="list-group position-absolute" style="z-index: 9999; top: 0; width: 100%;">
-                                        <li class="list-group-item">An item</li>
-                                        <li class="list-group-item">A second item</li>
+                                    <ul class="list-group position-absolute" id="tampilhasil" style="z-index: 9999; top: 0; width: 100%;">
+                                        <!-- <li class="list-group-item">An item</li> -->
                                     </ul>
                                 </div>
                                 <div class="form-group form-primary">
@@ -131,12 +130,13 @@
                                     <small class="text-danger"><?= form_error('username') ?></small>
                                 </div>
                                 <div class="form-group form-primary">
-                                    <select name="departemen" id="departemen" class="form-control" required>
+                                    <!-- <select name="departemen" id="departemen" class="form-control" required>
                                         <option selected disabled>Pilih departemen</option>
                                         <?php foreach ($departemen as $dp) : ?>
                                             <option value="<?= $dp['departemen'] ?>"><?= $dp['departemen'] ?></option>
                                         <?php endforeach ?>
-                                    </select>
+                                    </select> -->
+                                    <input type="text" name="departemen" id="departemen" class="form-control" value="<?= set_value('departemen') ?>" placeholder="Departemen" readonly>
                                     <small class="text-danger"><?= form_error('departemen') ?></small>
                                 </div>
 
@@ -212,9 +212,7 @@
                     console.log(response);
 
                     if (response.length > 0) {
-                        console.log('data ada');
-
-
+                        // console.log('data ada');
                         $('#name').val(response[0].NM);
 
                     }
@@ -223,7 +221,48 @@
             });
         });
 
-        $('#tampilcari').addClass('d-none')
+        $('#tampilcari').addClass('d-none');
+
+        $('#name').on('keyup', function() {
+            let nama = $(this).val().toUpperCase();
+            if (nama.length >= 3) {
+                // console.log(kata);
+
+                $.ajax({
+                    type: "post",
+                    url: base_url + "auth/cari_nama",
+                    data: {
+                        nama: nama
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        // console.log(response);
+
+                        if (response.length > 0) {
+                            // console.log('data ada');
+                            $('#tampilcari').removeClass('d-none');
+                            $('#tampilhasil').html('');
+                            $.each(response, function(i, v) {
+                                $('#tampilhasil').append(`<a href="#" class="list-group-item" onclick="masukkan('${v.Nm_Karyawan}', '${v.NIK}', '${v.Kd_Bagian}')">${v.Nm_Karyawan   } |  ${v.NIK}  </a>`);
+                            });
+
+                        }
+
+                    }
+                });
+            } else if (nama == '') {
+                $('#tampilhasil').html('');
+            }
+
+
+        })
+
+        function masukkan(nama, nik, departemen) {
+            $('#tampilhasil').html('');
+            $('#id').val(nik);
+            $('#name').val(nama);
+            $('#departemen').val(departemen);
+        }
     </script>
 </body>
 

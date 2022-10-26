@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <select name="menu_id" id="menu_id" class="form-control">
                             <option value="">select Menu</option>
-                            <?php foreach ($menu as $m) : ?>
+                            <?php foreach ($menu_edit as $m) : ?>
                                 <option value="<?= $m['id'] ?>"> <?= $m['menu'] ?> </option>
                             <?php endforeach ?>
                         </select>

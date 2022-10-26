@@ -112,3 +112,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    var d = new Date();
+    d.setDate(d.getDate() - 3);
+    console.log(d.toISOString().slice(0, 10));
+
+    let inputTanggal = document.querySelector('#tanggal');
+    let waktu = new Date();
+    let tgl = waktu.getDate();
+    tanggal.setAttribute("min", d.toISOString().slice(0, 10));
+</script>

@@ -20,15 +20,16 @@ class Approval_4 extends CI_Controller
         $data['role'] = $this->session->userdata['role_id'];
 
         $db2 = $this->load->database('database_kedua', TRUE);
+        $status = [4, 6];
 
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['lembur'] = $this->m_lembur->get_form_lembur('4');
+        $data['lembur'] = $this->m_lembur->get_form_lembur_manager($status);
 
         $peserta = [];
 
         foreach ($data['lembur'] as $d) {
 
-            $hasil = $this->m_lembur->get_peserta($d['id'], '4');
+            $hasil = $this->m_lembur->get_peserta($d['id'], $status);
             foreach ($hasil as $h) {
                 $peserta[] = [
                     'id' => $h['id_form'],
@@ -53,6 +54,7 @@ class Approval_4 extends CI_Controller
         $role = $this->session->userdata['role_id'];
         $data['menu'] = $this->m_lembur->cari_menu($role);
         $data['role'] = $this->session->userdata['role_id'];
+        $manager = $this->session->userdata['username'];
 
         $db2 = $this->load->database('database_kedua', TRUE);
         // $data['userini'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
@@ -60,10 +62,10 @@ class Approval_4 extends CI_Controller
         // $id = ($user['nik']);
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         // $status = $this->session->userdata('status_form');
-        $status = 5;
+        $status = [5, 6];
 
         // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['lembur'] = $this->m_lembur->get_form_approve($status);
+        $data['lembur'] = $this->m_lembur->get_form_approve_manager($manager);
 
         $peserta = [];
 
@@ -104,7 +106,7 @@ class Approval_4 extends CI_Controller
 
 
         // if ($status_form == 1) {
-        $status = 4;
+        $status = [4, 6];
         // } elseif ($status_form == 2) {
         //     $status = 1;
         // } elseif ($status_form == 3) {
@@ -129,7 +131,7 @@ class Approval_4 extends CI_Controller
 
     public function approve($id)
     {
-        $status_form = 5;
+        // $status_form = 5;
 
         $result = array();
         $r = 0;
@@ -139,7 +141,7 @@ class Approval_4 extends CI_Controller
                 'jam_mulai' => $_POST['jam_mulai'][$key],
                 'jam_selesai' => $_POST['jam_selesai'][$key],
                 'bagian' => $_POST['bagian'][$key],
-                'status' => $status_form
+                // 'status' => $status_form
             ];
 
             foreach ($result as $r) {
@@ -148,7 +150,7 @@ class Approval_4 extends CI_Controller
                     $jam_mulai = $r['jam_mulai'],
                     $jam_selesai = $r['jam_selesai'],
                     $bagian = $r['bagian'],
-                    $status = $r['status']
+                    // $status = $r['status']
                 ];
             }
 
@@ -156,7 +158,7 @@ class Approval_4 extends CI_Controller
                 'jam_mulai' => $jam_mulai,
                 'jam_selesai' => $jam_selesai,
                 'bagian' => $bagian,
-                'status' => $status
+                // 'status' => $status
             ];
 
 
@@ -164,7 +166,7 @@ class Approval_4 extends CI_Controller
         }
 
         $data2 = [
-            'status' => $status_form,
+            // 'status' => $status_form,
             'manager' => $this->session->userdata('username')
         ];
 

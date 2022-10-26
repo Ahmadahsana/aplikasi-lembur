@@ -168,6 +168,38 @@ class Admin extends CI_Controller
         $this->load->view('template/footer', $data);
     }
 
+    public function daftar_lembur()
+    {
+        $role = $this->session->userdata['role_id'];
+        $data['menu'] = $this->m_lembur->cari_menu($role);
+        $data['role'] = $this->session->userdata['role_id'];
+        $data['title'] = 'Daftar lembur';
+        $db2 = $this->load->database('database_kedua', TRUE);
+        $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+
+        $data['lembur'] = $this->m_lembur->get_form_lembur_admin();
+        $peserta = [];
+
+        foreach ($data['lembur'] as $d) {
+
+            $hasil = $this->m_lembur->get_peserta($d['id'], $d['status']);
+            foreach ($hasil as $h) {
+                $peserta[] = [
+                    'id' => $h['id_form'],
+                    'peserta' => $h['nama_user']
+                ];
+            }
+        };
+
+        $data['peserta'] = $peserta;
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/topbar', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('admin/daftar_lembur', $data);
+        $this->load->view('template/footer', $data);
+    }
+
     public function hapussub($id)
     {
         $this->load->model('m_menu');
@@ -193,6 +225,9 @@ class Admin extends CI_Controller
         $data['departemen'] = $this->db->get('departemen')->result_array();
         $data['role'] = $this->db->get('user_role')->result_array();
 
+        $departemen = $this->m_user->get_departemen_edit($nik);
+        $data['departemen_user'] = $departemen;
+
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);
         $this->load->view('template/sidebar', $data);
@@ -213,8 +248,8 @@ class Admin extends CI_Controller
         $aktif = $this->input->post('aktif');
 
 
-
-        $data = [ //proses pengambilan data
+        //ini untuk database pura keluhan
+        $data = [
             'nik' => $nik,
             'name' => $nama,
             'username' => $username,
@@ -248,7 +283,7 @@ class Admin extends CI_Controller
             $this->m_user->tambah_role($data_role);
         }
 
-        //proses memasukkan data yang diambil kedalam tabel user
+        //proses memasukkan data yang diambil kedalam tabel user di pura keluhan
 
         $this->m_user->update_user($username, $data);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
@@ -284,5 +319,68 @@ class Admin extends CI_Controller
         // var_dump($id);
         // echo json_encode($id);
         $this->m_user->hapus_role($id);
+    }
+
+    function hapus_departemen()
+    {
+        $id = $this->input->get('id');
+        $this->m_user->hapus_departemen($id);
+    }
+
+    function ttd()
+    {
+        $role = $this->session->userdata['role_id'];
+        $data['menu'] = $this->m_lembur->cari_menu($role);
+        $data['role'] = $this->session->userdata['role_id'];
+        $data['title'] = 'Tanda tangan';
+        $db2 = $this->load->database('database_kedua', TRUE);
+        $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+
+        $data['data_role'] = $this->m_user->get_role_pimpinan();
+        $data['data_ttd'] = $this->m_user->get_ttd();
+
+
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/topbar', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('admin/ttd', $data);
+        $this->load->view('template/footer', $data);
+    }
+
+    function simpan_ttd()
+    {
+        $username = $this->input->post('username');
+        $nik = $this->input->post('nik');
+        $gambar = $_FILES['gambar']['name'];
+
+        if ($gambar) {
+            $config['upload_path']      = './assets/images/ttd/';
+            $config['allowed_types']    = 'jpg|png|gif|jpeg';
+            $config['file_name']    = $username;
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('gambar')) {
+                $new_image = $this->upload->data('file_name');
+                // $this->db->set('gambar_keluhan', $new_image);
+            } else {
+                echo $this->upload->display_errors();
+            }
+        }
+
+        $data = [
+            'nik' => $nik,
+            'username' => $username,
+            'ttd' => $new_image
+        ];
+        // var_dump($new_image);
+
+        $this->m_user->tambah_ttd($data);
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            berhasil simpan ttd
+            </div>');
+        redirect('admin/ttd');
     }
 }
