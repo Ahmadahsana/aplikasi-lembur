@@ -42,13 +42,13 @@
                             <tr>
 
                                 <th scope="row"><?= $no++ ?></th>
-                                <td><input type="text" name="nama[]" class="form-control" value="<?= $d['nama_user'] ?>" readonly></td>
-                                <td><input type="text" name="nik[]" class="form-control" value="<?= $d['nik'] ?>" readonly></td>
-                                <td><input type="text" name="no_order[]" class="form-control" value="<?= $d['no_order'] ?>" readonly></td>
-                                <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="<?= $d['jam_mulai'] ?>" readonly></td>
-                                <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="<?= $d['jam_selesai'] ?>" readonly></td>
-                                <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="<?= $d['bagian'] ?>" readonly></td>
-                                <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="<?= $d['alasan'] ?>" readonly></td>
+                                <td><?= $d['nama_user'] ?></td>
+                                <td><?= $d['nik'] ?></td>
+                                <td><?= $d['no_order'] ?></td>
+                                <td><?= $d['jam_mulai'] ?></td>
+                                <td><?= $d['jam_selesai'] ?></td>
+                                <td><?= $d['bagian'] ?></td>
+                                <td><?= $d['alasan'] ?></td>
                                 <!-- <td></td> -->
                             </tr>
                         <?php endforeach ?>
@@ -57,7 +57,7 @@
 
                 <?php if ($this->session->userdata['role_id'] !== '8') : ?>
 
-                    <h4>Daftar yang anda tolak</h4>
+                    <h4>Daftar Perubahan</h4>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -68,6 +68,7 @@
                                 <th scope="col" style="width: 140px;">Jam mulai</th>
                                 <th scope="col" style="width: 140px;">Jam selesai</th>
                                 <th scope="col">Bagian</th>
+                                <th scope="col">Jenis Perubahan</th>
                                 <th scope="col">Alasan tolak</th>
                                 <!-- <th scope="col">Opsi</th> -->
 
@@ -79,13 +80,18 @@
                             ?>
                                 <tr>
                                     <td scope="row"><?= $no++ ?></td>
-                                    <td><input type="text" name="nama[]" class="form-control" value="<?= $t['nama_user'] ?>" readonly></td>
-                                    <td><input type="text" name="nik[]" class="form-control" value="<?= $t['nik'] ?>" readonly></td>
-                                    <td><input type="text" name="no_order[]" class="form-control" value="<?= $t['no_order'] ?>"></td>
-                                    <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="<?= $t['jam_mulai'] ?>" readonly></td>
-                                    <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="<?= $t['jam_selesai'] ?>" readonly></td>
-                                    <td><input type="text" name="bagian[]" class="form-control" value="<?= $t['bagian'] ?>" readonly></td>
-                                    <td><input type="text" name="nama[]" class="form-control" value="<?= $t['keterangan'] ?>" readonly></td>
+                                    <td><?= $t['nama_user'] ?></td>
+                                    <td><?= $t['nik'] ?></td>
+                                    <td><?= $t['no_order'] ?></td>
+                                    <td><?= $t['jam_mulai'] ?></td>
+                                    <td><?= $t['jam_selesai'] ?></td>
+                                    <td><?= $t['bagian'] ?></td>
+                                    <td><span class="badge badge-pill <?php if ($t['jenis_log'] == 1) {
+                                                                            echo 'badge-success';
+                                                                        } else {
+                                                                            echo 'badge-danger';
+                                                                        } ?> "><?= $t['nama_log'] ?></span></td>
+                                    <td><?= $t['keterangan'] ?></td>
                                     <!-- <td></td> -->
                                 </tr>
                             <?php endforeach ?>

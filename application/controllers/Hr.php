@@ -31,10 +31,13 @@ class Hr extends CI_Controller
         foreach ($data['lembur'] as $d) {
 
             $hasil = $this->m_lembur->get_peserta_hr($d['id'], $status);
+
             foreach ($hasil as $h) {
                 $peserta[] = [
                     'id' => $h['id_form'],
-                    'peserta' => $h['nama_user']
+                    'peserta' => $h['nama_user'],
+                    'jam_selesai' => $h['jam_selesai'],
+                    'jam_mulai' => $h['jam_mulai']
                 ];
             }
         };
@@ -120,35 +123,44 @@ class Hr extends CI_Controller
 
         $result = array();
         $r = 0;
-        foreach ($_POST['jam_selesai'] as $key => $val) {
-            $result[] = [
-                'nama_user' => $_POST['nama'][$key],
-                'jam_mulai' => $_POST['jam_mulai'][$key],
-                'jam_selesai' => $_POST['jam_selesai'][$key],
-                'bagian' => $_POST['bagian'][$key],
-                'status' => $status_form
-            ];
+        // foreach ($_POST['jam_selesai'] as $key => $val) {
+        //     $result[] = [
+        //         'nama_user' => $_POST['nama'][$key],
+        //         'jam_mulai' => $_POST['jam_mulai'][$key],
+        //         'jam_selesai' => $_POST['jam_selesai'][$key],
+        //         'bagian' => $_POST['bagian'][$key],
+        //         'status' => $status_form
+        //     ];
 
-            foreach ($result as $r) {
-                $data = [
-                    $nama = $r['nama_user'],
-                    $jam_mulai = $r['jam_mulai'],
-                    $jam_selesai = $r['jam_selesai'],
-                    $bagian = $r['bagian'],
-                    $status = $r['status']
-                ];
-            }
+        //     foreach ($result as $r) {
+        //         $data = [
+        //             $nama = $r['nama_user'],
+        //             $jam_mulai = $r['jam_mulai'],
+        //             $jam_selesai = $r['jam_selesai'],
+        //             $bagian = $r['bagian'],
+        //             $status = $r['status']
+        //         ];
+        //     }
 
-            $data1 = [
-                'jam_mulai' => $jam_mulai,
-                'jam_selesai' => $jam_selesai,
-                'bagian' => $bagian,
-                'status' => $status
-            ];
+        //     $data1 = [
+        //         'jam_mulai' => $jam_mulai,
+        //         'jam_selesai' => $jam_selesai,
+        //         'bagian' => $bagian,
+        //         'status' => $status
+        //     ];
 
+        //     $this->m_lembur->update_status($id, $nama, $data1);
+        // }
 
-            $this->m_lembur->update_status($id, $nama, $data1);
-        }
+        // metode lain ----------------------------------------------------
+
+        $data1 = [
+            'status' => 6
+        ];
+
+        $this->m_lembur->update_status_hr($id, $data1);
+
+        // akhir metode lain ----------------------------------------------
 
         $data2 = [
             'status' => $status_form

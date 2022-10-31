@@ -82,6 +82,10 @@
                             <label for="exampleInputPassword1">Foto Tanda Tangan</label>
                             <input type="file" name="gambar" class="form-control" id="exampleInputPassword1" placeholder="Password">
                         </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Nama Terang</label>
+                            <input type="text" name="nama_terang" class="form-control" id="exampleInputPassword1" placeholder="Nama terang">
+                        </div>
                         <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
                     </form>
                 </div>

@@ -150,8 +150,11 @@ class Approval_1 extends CI_Controller
     {
         // $get_departemen_form = $this->m_lembur->get_departemen_form($id);
         // $departemen_form = $get_departemen_form[0]['id_departemen'];
-
+        // var_dump($this->session->userdata('nik'));
+        // die;
+        $user_pic = $this->session->userdata('nik');
         $departemen = $this->session->userdata('departemen');
+        $detail_form = $this->m_lembur->get_form_detail($id);
 
         if ($departemen == 'Produksi') {
             $status_form = 1;
@@ -159,12 +162,37 @@ class Approval_1 extends CI_Controller
             $status_form = 2;
         }
 
-        // var_dump($status_form);
+        // var_dump($detail_form);
         // die;
 
         $result = array();
         $r = 0;
         foreach ($_POST['jam_selesai'] as $key => $val) {
+
+            if ($detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] || $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]) { // || $detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] && $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]
+
+                $data_detail = [
+                    'id_detail' => $detail_form[$key]['id'],
+                    'id_form' => $detail_form[$key]['id_form'],
+                    'nama_user' => $detail_form[$key]['nama_user'],
+                    'nik' => $detail_form[$key]['nik'],
+                    'jam_mulai'  => $detail_form[$key]['jam_mulai'],
+                    'jam_selesai' => $detail_form[$key]['jam_selesai'],
+                    'departemen' => $detail_form[$key]['departemen'],
+                    'status_kar' => $detail_form[$key]['status_kar'],
+                    'bagian' => $detail_form[$key]['bagian'],
+                    'no_order' => $detail_form[$key]['no_order'],
+                    'alasan' => $detail_form[$key]['alasan'],
+                    'status' => $status_form,
+                    'jenis_log' => 1,
+                    'user_pic' => $user_pic
+                ];
+                // var_dump($data_detail);
+                // die;
+                $this->m_lembur->insert_log($data_detail);
+            }
+
+
             $result[] = [
                 'nama_user' => $_POST['nama'][$key],
                 'jam_mulai' => $_POST['jam_mulai'][$key],
@@ -190,9 +218,11 @@ class Approval_1 extends CI_Controller
                 'status' => $status
             ];
 
-
             $this->m_lembur->update_status($id, $nama, $data1);
         }
+
+        // var_dump('tidak ada perubahan');
+        // die;
 
         $data2 = [
             'status' => $status_form,
@@ -212,6 +242,7 @@ class Approval_1 extends CI_Controller
 
     function detail_approve($idform, $status)
     {
+        $user_pic = $this->session->userdata('nik');
         $role = $this->session->userdata['role_id'];
         $data['menu'] = $this->m_lembur->cari_menu($role);
         $data['role'] = $this->session->userdata['role_id'];
@@ -244,7 +275,7 @@ class Approval_1 extends CI_Controller
 
         $data['form'] = $this->m_lembur->get_form($idform);
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
-        $data['tolak'] = $this->m_lembur->get_tolak($idform, $status_tolak);
+        $data['tolak'] = $this->m_lembur->get_tolak($idform, $user_pic);
 
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);

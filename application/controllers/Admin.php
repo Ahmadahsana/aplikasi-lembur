@@ -352,6 +352,7 @@ class Admin extends CI_Controller
     {
         $username = $this->input->post('username');
         $nik = $this->input->post('nik');
+        $nama_terang = $this->input->post('nama_terang');
         $gambar = $_FILES['gambar']['name'];
 
         if ($gambar) {
@@ -372,7 +373,8 @@ class Admin extends CI_Controller
         $data = [
             'nik' => $nik,
             'username' => $username,
-            'ttd' => $new_image
+            'ttd' => $new_image,
+            'nama_terang' => $nama_terang
         ];
         // var_dump($new_image);
 

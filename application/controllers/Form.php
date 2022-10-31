@@ -175,24 +175,44 @@ class Form extends CI_Controller
         $data['data_ttd'] = $this->m_user->get_ttd();
 
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
+        // var_dump($status);
         $this->load->view('laporan_pdf1', $data);
     }
 
     function tambah_tolak()
     {
-        $user = $this->input->post('nama');
+        $id_detail = $this->input->post('nama');
         $idform = $this->input->post('idform');
         $keterangan = $this->input->post('keterangan');
+        $user_pic = $this->session->userdata('nik');
+
+        $dari_detail = $this->m_lembur->cari_detail_form($id_detail);
 
         $data = [
-            'keterangan' => $keterangan
+            'id_detail' => $dari_detail['id'],
+            'id_form' => $dari_detail['id_form'],
+            'nama_user' => $dari_detail['nama_user'],
+            'nik' => $dari_detail['nik'],
+            'jam_mulai'  => $dari_detail['jam_mulai'],
+            'jam_selesai' => $dari_detail['jam_selesai'],
+            'departemen' => $dari_detail['departemen'],
+            'status_kar' => $dari_detail['status_kar'],
+            'bagian' => $dari_detail['bagian'],
+            'no_order' => $dari_detail['no_order'],
+            'alasan' => $dari_detail['alasan'],
+            'status' => $dari_detail['status'],
+            'jenis_log' => 2,
+            'keterangan' => $keterangan,
+            'user_pic' => $user_pic
         ];
 
-        $update = $this->m_lembur->update_keterangan($data, $user, $idform);
-        if ($update > 0) {
-            echo 'success';
-        } else {
-            echo 'gagal';
-        }
+        $tambah_log = $this->m_lembur->insert_log($data);
+        $this->m_lembur->hapus_detail($id_detail);
+        // if ($update > 0) {
+        //     echo 'success';
+        // } else {
+        //     echo 'gagal';
+        // }
+        // var_dump($dari_detail);
     }
 }

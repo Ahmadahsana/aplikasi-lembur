@@ -319,7 +319,6 @@ class User extends CI_Controller
             $password = md5($this->input->post('password_lama'));
             $password_baru = md5($this->input->post('password_baru1'));
 
-
             if ($password !== $data['userini']['password']) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                 Password salah

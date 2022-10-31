@@ -132,10 +132,33 @@ class Approval_4 extends CI_Controller
     public function approve($id)
     {
         // $status_form = 5;
-
+        $detail_form = $this->m_lembur->get_form_detail($id);
+        $user_pic = $this->session->userdata('nik');
         $result = array();
         $r = 0;
         foreach ($_POST['jam_selesai'] as $key => $val) {
+            if ($detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] || $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]) { // || $detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] && $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]
+                $data_detail = [
+                    'id_detail' => $detail_form[$key]['id'],
+                    'id_form' => $detail_form[$key]['id_form'],
+                    'nama_user' => $detail_form[$key]['nama_user'],
+                    'nik' => $detail_form[$key]['nik'],
+                    'jam_mulai'  => $detail_form[$key]['jam_mulai'],
+                    'jam_selesai' => $detail_form[$key]['jam_selesai'],
+                    'departemen' => $detail_form[$key]['departemen'],
+                    'status_kar' => $detail_form[$key]['status_kar'],
+                    'bagian' => $detail_form[$key]['bagian'],
+                    'no_order' => $detail_form[$key]['no_order'],
+                    'alasan' => $detail_form[$key]['alasan'],
+                    'status' => $detail_form[$key]['status'],
+                    'jenis_log' => 1,
+                    'user_pic' => $user_pic
+                ];
+                // var_dump($data_detail);
+                // die;
+                $this->m_lembur->insert_log($data_detail);
+            }
+
             $result[] = [
                 'nama_user' => $_POST['nama'][$key],
                 'jam_mulai' => $_POST['jam_mulai'][$key],
@@ -184,6 +207,7 @@ class Approval_4 extends CI_Controller
 
     function detail_approve($idform, $status)
     {
+        $user_pic = $this->session->userdata('nik');
         $role = $this->session->userdata['role_id'];
         $data['menu'] = $this->m_lembur->cari_menu($role);
         $data['role'] = $this->session->userdata['role_id'];
@@ -216,7 +240,7 @@ class Approval_4 extends CI_Controller
 
         $data['form'] = $this->m_lembur->get_form($idform);
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
-        $data['tolak'] = $this->m_lembur->get_tolak($idform, $status_tolak);
+        $data['tolak'] = $this->m_lembur->get_tolak($idform, $user_pic);
 
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);

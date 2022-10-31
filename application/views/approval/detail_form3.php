@@ -46,7 +46,7 @@
                         ?>
                             <tr>
                                 <th scope="row"><?= $no++ ?></th>
-                                <td><input type="text" name="nama[]" class="form-control" value="<?= $d['nama_user'] ?>" readonly></td>
+                                <td><input type="hidden" id="id_detail" class="form-control" value="<?= $d['id'] ?>" readonly><input type="text" name="nama[]" class="form-control" value="<?= $d['nama_user'] ?>" readonly></td>
                                 <td><input type="text" name="nik[]" class="form-control" value="<?= $d['nik'] ?>" readonly></td>
                                 <td><input type="text" name="no_order[]" class="form-control" value="<?= $d['no_order'] ?>"></td>
                                 <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="<?= $d['jam_mulai'] ?>"></td>

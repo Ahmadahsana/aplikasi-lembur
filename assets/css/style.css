@@ -10445,7 +10445,7 @@ body.menu-bottom #collapse-menu {
 	width: 100%;
 	border: none;
 	border-radius: 0;
-	font-size: 16px;
+	/* font-size: 16px; */
 	font-weight: 400;
 	padding: 0;
 	background-color: transparent;
@@ -11022,7 +11022,7 @@ span.badge {
 }
 
 th {
-	font-weight: 500;
+	/* font-weight: 500; */
 }
 
 table.dataTable.display tbody tr.odd,

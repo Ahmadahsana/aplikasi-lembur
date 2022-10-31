@@ -272,16 +272,45 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="border: none;"><?= $form['dept'] ?></td>
+                        <td style="border: none;">
+                            <!-- <?= $form['dept'] ?> -->
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['dept']) : ?>
+                                    <?= $d['nama_terang'] ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
+
                         <?php if ($departemen[0]['id_dept'] == '2') {
                             echo '<td style="border: none;">' . $form['ppc'] . '</td>';
                         } ?>
 
 
                         <!-- <td><?= $form['ppc'] ?></td> -->
-                        <td style="border: none;"><?= $form['efisiensi'] ?></td>
-                        <td style="border: none;"><?= $form['cc'] ?></td>
-                        <td style="border: none;"><?= $form['manager'] ?></td>
+                        <td style="border: none;">
+                            <!-- <?= $form['efisiensi'] ?> -->
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['efisiensi']) : ?>
+                                    <?= $d['nama_terang'] ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
+                        <td style="border: none;">
+                            <!-- <?= $form['cc'] ?> -->
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['cc']) : ?>
+                                    <?= $d['nama_terang'] ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
+                        <td style="border: none;">
+                            <!-- <?= $form['manager'] ?> -->
+                            <?php foreach ($data_ttd as $d) : ?>
+                                <?php if ($d['username'] == $form['manager']) : ?>
+                                    <?= $d['nama_terang'] ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </td>
                     </tr>
                 </table>
 

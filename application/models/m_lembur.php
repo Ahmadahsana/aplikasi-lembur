@@ -79,6 +79,14 @@ class m_lembur extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    function get_form_detail($id)
+    {
+        $this->db->select('*');
+        $this->db->from('detail_form');
+        $this->db->where('id_form', $id);
+        return $this->db->get()->result_array();
+    }
+
     function get_detail($id, $status)
     {
         $this->db->select('*');
@@ -109,13 +117,13 @@ class m_lembur extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    function get_tolak($idform, $status_tolak)
+    function get_tolak($idform, $user_pic)
     {
         $this->db->select('*');
-        $this->db->from('form_pengajuan');
-        $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
-        $this->db->where('form_pengajuan.id', $idform);
-        $this->db->where('detail_form.status', $status_tolak);
+        $this->db->from('log_perubahan');
+        $this->db->join('jenis_log', 'log_perubahan.jenis_log = jenis_log.id');
+        $this->db->where('id_form', $idform);
+        $this->db->where('user_pic', $user_pic);
         return $this->db->get()->result_array();
     }
 
@@ -123,6 +131,15 @@ class m_lembur extends CI_Model
     {
         $this->db->where('id_form', $id);
         $this->db->where('nama_user', $nama);
+        $this->db->update('detail_form', $data);
+        return;
+    }
+
+    function update_status_hr($id, $data)
+    {
+        $this->db->where('id_form', $id);
+        $this->db->where('status', 4);
+        $this->db->or_where('status', 5);
         $this->db->update('detail_form', $data);
         return;
     }
@@ -371,11 +388,30 @@ class m_lembur extends CI_Model
 
     function get_peserta_hr($id, $status)
     {
-        $this->db->select('nama_user, id_form, form_pengajuan.status');
+        $this->db->select('nama_user, id_form, form_pengajuan.status, jam_mulai, jam_selesai');
         $this->db->from('detail_form');
         $this->db->join('form_pengajuan', 'form_pengajuan.id = detail_form.id_form');
         $this->db->where('detail_form.id_form', $id);
         $this->db->where_in('detail_form.status', $status);
         return $this->db->get()->result_array();
+    }
+
+    function insert_log($data_detail)
+    {
+        $this->db->insert('log_perubahan', $data_detail);
+    }
+
+    function cari_detail_form($id_detail)
+    {
+        $this->db->select('*');
+        $this->db->from('detail_form');
+        $this->db->where('id', $id_detail);
+        return $this->db->get()->row_array();
+    }
+
+    function hapus_detail($id_detail)
+    {
+        $this->db->where('id', $id_detail);
+        $this->db->delete('detail_form');
     }
 }

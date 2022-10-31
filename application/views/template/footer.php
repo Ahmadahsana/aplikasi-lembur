@@ -128,6 +128,7 @@
     const tbody = document.querySelector("tbody")
     const carinama1 = document.getElementById("carinama")
 
+    let nomorUrut = 1;
 
     $('#tampilcarinama').on('click', '.listcarinama', function(event) {
         let idpegawai = $(this).data('idpegawai')
@@ -139,7 +140,7 @@
         console.log(namapegawai)
 
         isi = `<tr class="urut">
-                <td style="width: 20px;" class="angka"></td>
+                <td style="width: 20px;" class="angka">${nomorUrut}</td>
                 <td><input type="text" class="form-control" id="nama" name="nama[]" value="${namapegawai}" readonly> <input type="text" class="form-control d-none" id="nik" name="nik[]" value="${idpegawai}" readonly></td>
                 
                 <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="" required></td>
@@ -155,6 +156,7 @@
                 </tr> `
         $(tbody).append(isi);
         event.preventDefault();
+        nomorUrut++
 
         $('#exampleModal').modal('hide');
         $('#tampilcarinama').html('')
@@ -194,32 +196,35 @@
 
     tbody.addEventListener("click", function(event) {
         if (event.target.id == "tolak") {
-
             var keterangan = prompt("ALASAN Tolak karyawan ini?");
-            console.log(keterangan);
-            var ok = event.target.parentElement.parentElement;
-            var iya = ok.querySelector('input');
-            var isinama = iya.getAttribute('value');
-            console.log(isinama);
+            if (keterangan == null) {
+                console.log('cancel');
+            } else {
+                var ok = event.target.parentElement.parentElement;
+                var iya = ok.querySelector('input');
+                var isinama = iya.getAttribute('value');
+                console.log(isinama);
 
-            var idform = `<?= $form['id'] ?>`;
+                var idform = `<?= $form['id'] ?>`;
 
 
-            console.log(idform);
+                console.log(idform);
 
-            $.ajax({
-                type: "post",
-                url: `<?= base_url('form/tambah_tolak/') ?>`,
-                data: {
-                    nama: isinama,
-                    idform: idform,
-                    keterangan: keterangan
-                },
-                success: function(response) {
-                    console.log(response);
-                    event.target.parentElement.parentElement.remove();
-                }
-            });
+                $.ajax({
+                    type: "post",
+                    url: `<?= base_url('form/tambah_tolak/') ?>`,
+                    data: {
+                        nama: isinama,
+                        idform: idform,
+                        keterangan: keterangan
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        event.target.parentElement.parentElement.remove();
+                    }
+                });
+            }
+
         }
     })
 
