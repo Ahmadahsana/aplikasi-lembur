@@ -162,7 +162,6 @@
         $('#tampilcarinama').html('')
         carinama1.value = ''
 
-
         // return t(document)
 
         // event.preventDefault();

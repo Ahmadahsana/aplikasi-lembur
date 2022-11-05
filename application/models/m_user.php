@@ -140,4 +140,10 @@ class M_user extends CI_Model
         $this->db->from('ttd');
         return $this->db->get()->result_array();
     }
+
+    function update_ttd($nik, $data)
+    {
+        $this->db->where('nik', $nik);
+        $this->db->update('ttd', $data);
+    }
 }

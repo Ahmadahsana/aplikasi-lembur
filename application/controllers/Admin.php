@@ -339,8 +339,6 @@ class Admin extends CI_Controller
         $data['data_role'] = $this->m_user->get_role_pimpinan();
         $data['data_ttd'] = $this->m_user->get_ttd();
 
-
-
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);
         $this->load->view('template/sidebar', $data);
@@ -370,19 +368,65 @@ class Admin extends CI_Controller
             }
         }
 
-        $data = [
-            'nik' => $nik,
-            'username' => $username,
-            'ttd' => $new_image,
-            'nama_terang' => $nama_terang
-        ];
-        // var_dump($new_image);
+        $ttdlama = $this->db->get_where('ttd', ['nik' => $nik])->result_array();
 
-        $this->m_user->tambah_ttd($data);
+        if (count($ttdlama) > 0) {
+
+            if ($gambar) {
+                $data = [
+                    'nik' => $nik,
+                    'username' => $username,
+                    'ttd' => $new_image,
+                    'nama_terang' => $nama_terang
+                ];
+            } else {
+                $data = [
+                    'nik' => $nik,
+                    'username' => $username,
+                    'nama_terang' => $nama_terang
+                ];
+            }
+
+            $this->m_user->update_ttd($nik, $data);
+        } else {
+            $data = [
+                'nik' => $nik,
+                'username' => $username,
+                'ttd' => $new_image,
+                'nama_terang' => $nama_terang
+            ];
+
+            $this->m_user->tambah_ttd($data);
+        }
+
 
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
             berhasil simpan ttd
             </div>');
         redirect('admin/ttd');
+    }
+
+    public function reset_password($username)
+    {
+        $password_reset = md5('123456');
+        $db2 = $this->load->database('database_kedua', TRUE);
+        $db2->set('password', $password_reset);
+        $db2->where('username', $username);
+        $db2->update('user');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                    Password berhasil direset
+                    </div>');
+        redirect('admin/daftar_user');
+    }
+
+    public function hapus_lembur($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('form_pengajuan');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                    Berhasil hapus
+                    </div>');
+        redirect('admin/daftar_lembur');
     }
 }

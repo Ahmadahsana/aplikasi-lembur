@@ -18,6 +18,7 @@
                                 <input type="text" class="form-control" id="nama" name="nama" value="<?= $useredit['name'] ?>">
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-2 col-form-label">NIK</label>
                             <div class="col-sm-10">
@@ -110,6 +111,12 @@
                                                             echo 'selected';
                                                         } ?>>Nonaktif</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Reset Password</label>
+                            <div class="col-sm-10">
+                                <a href="<?= base_url('admin/reset_password/') . $useredit['username'] ?>" class="btn btn-sm btn-danger">RESET</a>
                             </div>
                         </div>
                         <div class="form-group row">

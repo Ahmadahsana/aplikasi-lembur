@@ -35,7 +35,10 @@
                                     } ?>
                                 </td>
                                 <td><span class="badge badge-pill badge-<?= $l['warna'] ?>"><?= $l['nama_status'] ?></span></td>
-                                <td><a href="#" title="lihat detail"><button class="btn btn-info"><i class="fa fa-eye"></i></button></a></td>
+                                <td><a href="#" title="lihat detail"><button class="btn btn-sm btn-info"><i class="fa fa-eye"></i></button></a>
+                                    <a href="<?= base_url('admin/hapus_lembur/') . $l['id'] ?>" title="lihat detail" onclick="return confirm('Yakin hapus?')"><button class="btn btn-sm btn-danger">Hapus</button></a>
+                                </td>
+
                             </tr>
                         <?php endforeach ?>
 

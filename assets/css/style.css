@@ -988,7 +988,7 @@ a.bg-danger:hover {
 
 .table.table-sm td,
 .table.table-sm th {
-	padding: 0.6rem 2rem;
+	/* padding: 0.6rem 2rem; */
 }
 
 .table.table-xs td,
