@@ -107,8 +107,6 @@
 </head>
 
 <body>
-
-
     <div class="book">
         <div class="page">
             <div class="subpage">
@@ -172,6 +170,11 @@
                         <td>6</td>
                         <td>7</td> -->
                     </tr>
+                    <?php if ($form['perpanjangan'] == 1) : ?>
+                        <tr style="font-weight: bold;">
+                            <td colspan="7"> Perpanjangan Lembur</td>
+                        </tr>
+                    <?php endif ?>
                     <tr style="text-align: center;">
                         <td rowspan="2" style="width: 5%;">NO</td>
                         <td rowspan="2">NAMA KARYAWAN</td>

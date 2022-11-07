@@ -369,7 +369,7 @@ class m_lembur extends CI_Model
     function get_form_print($idform)
     {
         $db2 = $this->load->database('database_kedua', TRUE);
-        $this->db->select('form_pengajuan.id, pembuat, form_pengajuan.nik_h, alasan, no_order, tgl_lembur, dept, ppc, efisiensi, cc, manager');
+        $this->db->select('form_pengajuan.id, pembuat, form_pengajuan.nik_h, alasan, no_order, tgl_lembur, dept, ppc, efisiensi, cc, manager, perpanjangan');
         $this->db->from('form_pengajuan');
         $this->db->join($db2->database . '.user', 'form_pengajuan.nik_h = user.nik');
         $this->db->where('form_pengajuan.id', $idform);

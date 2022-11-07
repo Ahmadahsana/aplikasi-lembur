@@ -30,6 +30,7 @@ class User extends CI_Controller
 
         $tanggal = $this->input->post('tanggal');
         $alasan = $this->input->post('alasan');
+        $perpanjangan = $this->input->post('perpanjangan');
         $nik = $this->session->userdata('nik');
 
         // var_dump($nik);
@@ -53,16 +54,14 @@ class User extends CI_Controller
         $this->form_validation->set_rules('nama[]', 'nama', 'required|trim', ['required' => 'harus mengisi karyawan']);
 
         if ($this->form_validation->run() == true) {
+
             $dataform = [
                 'pembuat' => $user,
                 'nik_h' => $nik,
-                // 'alasan' => $alasan,
-                // 'no_order' => $no_order,
                 'tgl_lembur' => $tanggal,
-                'status' => 0
+                'status' => 0,
+                'perpanjangan' => $perpanjangan
             ];
-
-
 
             $insert1 = $this->m_lembur->insert_lembur($dataform);
 

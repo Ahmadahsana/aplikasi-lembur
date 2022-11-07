@@ -247,16 +247,24 @@ class Admin extends CI_Controller
         $role = $this->input->post('role');
         $aktif = $this->input->post('aktif');
 
+        // var_dump($role);
+        // var_dump($departemen);
+        // die;
+        if (is_null($role) && is_null($departemen)) {
+            //ini untuk database pura keluhan
+            $data = [
+                'name' => $nama,
+                'is_active' => $aktif
+            ];
 
-        //ini untuk database pura keluhan
-        $data = [
-            'nik' => $nik,
-            'name' => $nama,
-            'username' => $username,
-            'departemen' => $departemen,
-            // 'role_id' => $role,
-            'is_active' => $aktif
-        ];
+            $this->m_user->update_user($username, $data);
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            berhasil update data user !
+            </div>');
+            redirect('admin/daftar_user/');
+        }
+
 
         // mencari id departemen
         $caridepartemen = $this->m_user->cari_departemen($departemen);
@@ -264,6 +272,7 @@ class Admin extends CI_Controller
 
         // mencari di tb_grup_jabatan
         $carijabatan = $this->m_user->cari_jabatan($nik, $iddepartemen);
+
 
         if ($carijabatan == null) {
             $data_jabatan = [
@@ -285,7 +294,6 @@ class Admin extends CI_Controller
 
         //proses memasukkan data yang diambil kedalam tabel user di pura keluhan
 
-        $this->m_user->update_user($username, $data);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
         berhasil update data user
         </div>');

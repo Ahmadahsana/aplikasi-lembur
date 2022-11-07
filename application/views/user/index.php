@@ -10,23 +10,17 @@
                         <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= set_value('tanggal') ?>" required>
                         <small class="text-danger"><?= form_error('tanggal') ?></small>
                     </div>
-                    <!-- <div class="form-group col-md-3">
-                        <label for="mulai">Jam mulai</label>
-                        <input type="time" class="form-control" id="timemulai" name="timemulai" value="<?= set_value('timemulai') ?>" required>
+                    <div class="form-group col-md-6  align-self-end">
+                        <div class="form-check">
+                            <!-- <input class="form-check-input" type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                            <label for="vehicle1"> I have a bike</label> -->
+                            <input type="checkbox" id="perpanjangan" name="perpanjangan" value="1">
+                            <label for="perpanjangan"> Perpanjangan? </label>
+                        </div>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="selesai">Jam selesai</label>
-                        <input type="time" class="form-control" id="timeselesai" name="timeselesai" value="<?= set_value('timeselesai') ?>" required>
-                    </div> -->
                 </div>
-                <!-- <div class="form-group">
-                    <label for="no_order">NO Order</label>
-                    <input type="text" class="form-control" id="no_order" name="no_order" value="<?= set_value('no_order') ?>">
-                </div> -->
-                <!-- <div class="form-group">
-                    <label for="alasan">Alasan lembur</label>
-                    <textarea class="form-control" id="alasan" name="alasan" rows="2" required><?= set_value('alasan') ?></textarea>
-                </div> -->
+
+
 
                 <div class="row justify-content-between">
                     <div class="form-group col-md-4">
@@ -122,4 +116,14 @@
     let waktu = new Date();
     let tgl = waktu.getDate();
     tanggal.setAttribute("min", d.toISOString().slice(0, 10));
+</script>
+<script type="text/javascript">
+    window.addEventListener('keydown', function(e) {
+        if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+            if (e.target.nodeName === 'INPUT' && e.target.type !== 'textarea') {
+                e.preventDefault();
+                return false;
+            }
+        }
+    }, true);
 </script>

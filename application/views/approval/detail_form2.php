@@ -10,20 +10,16 @@
                         <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="tanggal" value="<?= $form['tgl_lembur'] ?>" readonly>
                     </div>
                 </div>
-
-                <!-- <div class="form-group row">
-                    <label for="alasan" class="col-sm-2 col-form-label">Alasan</label>
-                    <div class="col-sm-10">
-                        <textarea type="text" class="form-control" id="alasan" name="alasan" cols="2" rows="2" readonly> <?= $form['alasan'] ?> </textarea>
+                <?php if ($form['perpanjangan'] == 1) : ?>
+                    <div class="form-group row">
+                        <label for="tanggal" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <button type="button" class="btn btn-success">
+                                Perpanjangan
+                            </button>
+                        </div>
                     </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="alasan" class="col-sm-2 col-form-label">NO Order</label>
-                    <div class="col-sm-10">
-                        <textarea type="text" class="form-control" id="no_order" name="no_order" cols="2" rows="2" readonly> <?= $form['no_order'] ?> </textarea>
-                    </div>
-                </div> -->
+                <?php endif ?>
                 <h4>Daftar pegawai</h4>
                 <table class="table table-hover">
                     <thead>
