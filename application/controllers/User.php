@@ -343,6 +343,7 @@ class User extends CI_Controller
         }
     }
 
+
     public function riwayat_pengajuan()
     {
         $role = $this->session->userdata['role_id'];
@@ -363,6 +364,51 @@ class User extends CI_Controller
         $this->load->view('template/sidebar', $data);
         $this->load->view('user/riwayat_pengajuan', $data);
         $this->load->view('template/footer', $data);
+    }
+
+    public function edit_form($idform)
+    {
+        // data untuk yang edit ini
+        $data = [];
+        foreach ($_POST['jam_selesai1'] as $key => $value) {
+            $nama = $_POST['nama1'][$key];
+            $data = [
+                'nama_user' => $_POST['nama1'][$key],
+                'jam_mulai' => $_POST['jam_mulai1'][$key],
+                'jam_selesai' => $_POST['jam_selesai1'][$key],
+                'bagian' => $_POST['bagian1'][$key],
+                'no_order' => $_POST['no_order1'][$key],
+            ];
+
+            $this->m_lembur->update_status($idform, $nama, $data);
+        }
+
+        // data untuk nambah karyawan ini
+        if (isset($_POST['jam_selesai'])) {
+            $result = array();
+            foreach ($_POST['jam_selesai'] as $key => $val) {
+                $result[] = array(
+                    'id_form' => $idform,
+                    'nama_user' => $_POST['nama'][$key],
+                    'nik' => $_POST['nik'][$key],
+                    'jam_mulai' => $_POST['jam_mulai'][$key],
+                    'jam_selesai' => $_POST['jam_selesai'][$key],
+                    'departemen' => $_POST['departemen'][$key],
+                    'status_kar' => $_POST['status_kar'][$key],
+                    'bagian' => $_POST['bagian'][$key],
+                    'no_order' => $_POST['no_order'][$key],
+                    'alasan' => $_POST['alasan'][$key],
+                    'status' => 0
+                );
+            }
+
+            $this->db->insert_batch('detail_form', $result);
+        }
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                    Berhasil melakukan perubahan
+                    </div>');
+        redirect('form/detail_pengajuan/' . $idform . '/0');
     }
 
     function get_nama()

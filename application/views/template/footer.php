@@ -145,9 +145,9 @@
                 
                 <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="" required></td>
                 <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="" required></td>
-                <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="" required></td>
-                <td><input type="text" class="form-control" id="no_order" name="no_order[]" value=""></td>
-                <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="" required></td>
+                <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="" required placeholder="Bagian"></td>
+                <td><input type="text" class="form-control" id="no_order" name="no_order[]" value="" placeholder="No order"></td>
+                <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="" required placeholder="Alasan"></td>
                 <td><button type="button" class="btn btn-danger btn-sm mr-3" id="btnhapus"><i class="fa fa-trash" required></i></button>
                 <input type="text" class="form-control" id="status_kar" name="status_kar[]" value="${unit}" hidden>
                 <input type="text" class="form-control" id="departemen" name="departemen[]" value="${departemen_pegawai}" hidden>
