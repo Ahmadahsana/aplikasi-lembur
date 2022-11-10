@@ -53,6 +53,7 @@ class Approval_4 extends CI_Controller
     {
         $role = $this->session->userdata['role_id'];
         $data['menu'] = $this->m_lembur->cari_menu($role);
+        $username = $this->session->userdata['username'];
         $data['role'] = $this->session->userdata['role_id'];
         $manager = $this->session->userdata['username'];
 
@@ -65,7 +66,7 @@ class Approval_4 extends CI_Controller
         $status = [5, 6];
 
         // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['lembur'] = $this->m_lembur->get_form_approve_manager($manager);
+        $data['lembur'] = $this->m_lembur->get_form_approve_manager($manager, $username);
 
         $peserta = [];
 

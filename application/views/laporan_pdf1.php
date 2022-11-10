@@ -236,7 +236,7 @@
                         <td style="border: none;">
                             <?php foreach ($data_ttd as $d) : ?>
                                 <?php if ($d['username'] == $form['dept']) : ?>
-                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="40cm" weight="40cm" alt="">
                                 <?php endif ?>
                             <?php endforeach ?>
                         </td>
@@ -246,7 +246,7 @@
                             <td style="border: none;">
                                 <?php foreach ($data_ttd as $d) : ?>
                                     <?php if ($d['username'] == $form['ppc']) : ?>
-                                        <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                        <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="40cm" weight="40cm" alt="">
                                     <?php endif ?>
                                 <?php endforeach ?>
                             </td>
@@ -255,21 +255,21 @@
                         <td style="border: none;">
                             <?php foreach ($data_ttd as $d) : ?>
                                 <?php if ($d['username'] == $form['efisiensi']) : ?>
-                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="40cm" weight="40cm" alt="">
                                 <?php endif ?>
                             <?php endforeach ?>
                         </td>
                         <td style="border: none;">
                             <?php foreach ($data_ttd as $d) : ?>
                                 <?php if ($d['username'] == $form['cc']) : ?>
-                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="40cm" weight="40cm" alt="">
                                 <?php endif ?>
                             <?php endforeach ?>
                         </td>
                         <td style="border: none;">
                             <?php foreach ($data_ttd as $d) : ?>
                                 <?php if ($d['username'] == $form['manager']) : ?>
-                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="30cm" weight="30cm" alt="">
+                                    <img src="<?= base_url() ?>assets/images/ttd/<?= $d['ttd'] ?>" height="40cm" weight="40cm" alt="">
                                 <?php endif ?>
                             <?php endforeach ?>
                         </td>
@@ -308,11 +308,12 @@
                         </td>
                         <td style="border: none;">
                             <!-- <?= $form['manager'] ?> -->
-                            <?php foreach ($data_ttd as $d) : ?>
+                            <!-- <?php foreach ($data_ttd as $d) : ?>
                                 <?php if ($d['username'] == $form['manager']) : ?>
                                     <?= $d['nama_terang'] ?>
                                 <?php endif ?>
-                            <?php endforeach ?>
+                            <?php endforeach ?> -->
+                            Dandy Z
                         </td>
                     </tr>
                 </table>

@@ -78,8 +78,8 @@ class Approval_1 extends CI_Controller
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         // $user = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
 
-
         $nik = $this->session->userdata('nik');
+        $username = $this->session->userdata('username');
         $cari_departemen = $this->m_user->get_departemen_user($nik);
 
         $departemen = [];
@@ -87,7 +87,7 @@ class Approval_1 extends CI_Controller
             $departemen[] = $cd['id_departemen'];
         };
 
-        $data['lembur'] = $this->m_lembur->get_form_approve_departemen1($status, $departemen);
+        $data['lembur'] = $this->m_lembur->get_form_approve_departemen1($status, $departemen, $username);
 
         // var_dump($departemen);
 
@@ -148,10 +148,7 @@ class Approval_1 extends CI_Controller
 
     public function approve($id)
     {
-        // $get_departemen_form = $this->m_lembur->get_departemen_form($id);
-        // $departemen_form = $get_departemen_form[0]['id_departemen'];
-        // var_dump($this->session->userdata('nik'));
-        // die;
+
         $user_pic = $this->session->userdata('nik');
         $departemen = $this->session->userdata('departemen');
         $detail_form = $this->m_lembur->get_form_detail($id);
@@ -162,8 +159,23 @@ class Approval_1 extends CI_Controller
             $status_form = 2;
         }
 
-        // var_dump($detail_form);
+        // var_dump($_POST['jam_selesai']);
         // die;
+        // jika 
+        if (!isset($_POST['jam_selesai'])) {
+            $data3 = [
+                'status' => 9,
+                'dept' => $this->session->userdata('username')
+            ];
+
+            $this->m_lembur->update_status_form($id, $data3);
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            Berhasil Approve
+            </div>');
+
+            redirect('approval_1');
+        }
 
         $result = array();
         $r = 0;

@@ -52,6 +52,7 @@ class Approval_ppc extends CI_Controller
     {
         $role = $this->session->userdata['role_id'];
         $data['menu'] = $this->m_lembur->cari_menu($role);
+        $username = $this->session->userdata['username'];
         $data['role'] = $this->session->userdata['role_id'];
 
         $db2 = $this->load->database('database_kedua', TRUE);
@@ -63,7 +64,7 @@ class Approval_ppc extends CI_Controller
         $status = 2;
 
         // $data['user'] = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['lembur'] = $this->m_lembur->get_form_approve_ppc($status);
+        $data['lembur'] = $this->m_lembur->get_form_approve_ppc($status, $username);
 
         $peserta = [];
 
@@ -134,6 +135,20 @@ class Approval_ppc extends CI_Controller
         $user_pic = $this->session->userdata('nik');
         $result = array();
         $r = 0;
+        if (!isset($_POST['jam_selesai'])) {
+            $data3 = [
+                'status' => 9,
+                'ppc' => $this->session->userdata('username')
+            ];
+
+            $this->m_lembur->update_status_form($id, $data3);
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            Berhasil Approve
+            </div>');
+
+            redirect('Approval_ppc');
+        }
         foreach ($_POST['jam_selesai'] as $key => $val) {
             if ($detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] || $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]) { // || $detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] && $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]
                 $data_detail = [
