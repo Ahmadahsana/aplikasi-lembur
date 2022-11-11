@@ -40,7 +40,7 @@
     <!-- <link href="<?= base_url('assets/'); ?>datatables/css/buttons.dataTables.min.css" rel="stylesheet"> -->
 
     <style type="text/css">
-        tbody .number {
+        /* tbody .number {
             counter-reset: rowNumber;
         }
 
@@ -48,7 +48,17 @@
             counter-increment: rowNumber;
         }
 
-        tbody tr td:first-child::before .angka {
+        tbody tr td:first-child::before {
+            content: counter(rowNumber);
+            min-width: 1em;
+            margin-right: 0.5em;
+        } */
+
+        .number tr:not(.fble_htr) {
+            counter-increment: rowNumber;
+        }
+
+        .number tr:not(.fble_htr) td:first-child::before {
             content: counter(rowNumber);
             min-width: 1em;
             margin-right: 0.5em;

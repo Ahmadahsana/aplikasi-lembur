@@ -158,9 +158,33 @@ class Approval_1 extends CI_Controller
         } else {
             $status_form = 2;
         }
+        $datatolak = [];
+        if (isset($_POST['keterangan_tolak'])) {
+            foreach ($_POST['keterangan_tolak'] as $key => $value) {
+                $datatolak[] = [
+                    'id_detail' => $_POST['id_detail_tolak'][$key],
+                    'id_form' => $_POST['id_form_tolak'][$key],
+                    'nama_user' => $_POST['nama_tolak'][$key],
+                    'nik' => $_POST['nik_tolak'][$key],
+                    'jam_mulai'  => $_POST['jam_mulai_tolak'][$key],
+                    'jam_selesai' => $_POST['jam_selesai_tolak'][$key],
+                    'departemen' => $_POST['departemen_tolak'][$key],
+                    'status_kar' => $_POST['status_kar_tolak'][$key],
+                    'bagian' => $_POST['bagian_tolak'][$key],
+                    'no_order' => $_POST['no_order_tolak'][$key],
+                    'alasan' => $_POST['alasan_tolak'][$key],
+                    'status' => $_POST['status_tolak'][$key],
+                    'jenis_log' => 2,
+                    'keterangan' => $_POST['keterangan_tolak'][$key],
+                    'user_pic' => $user_pic
+                ];
 
-        // var_dump($_POST['jam_selesai']);
-        // die;
+                $this->m_lembur->hapus_detail($_POST['id_detail_tolak'][$key]);
+            }
+
+
+            $this->db->insert_batch('log_perubahan', $datatolak);
+        }
         // jika 
         if (!isset($_POST['jam_selesai'])) {
             $data3 = [

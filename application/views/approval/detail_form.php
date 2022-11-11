@@ -1,9 +1,10 @@
 <div class="page-body">
     <!-- <?php var_dump($form) ?> -->
+    <form action="<?= base_url('approval_1/approve/') . $form['id'] ?>" method="POST" class="form-material">
 
-    <div class="card">
-        <div class="card-body">
-            <form action="<?= base_url('approval_1/approve/') . $form['id'] ?>" method="POST" class="form-material">
+        <div class="card">
+            <div class="card-body">
+
                 <div class="form-group row">
                     <label for="tanggal" class="col-sm-2 col-form-label">Tanggal</label>
                     <div class="col-sm-10">
@@ -56,6 +57,7 @@
                                 <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="<?= $d['bagian'] ?>"></td>
                                 <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="<?= $d['alasan'] ?>"></td>
                                 <td>
+                                    <input type="hidden" id="id_detail" class="form-control" value="<?= $d['id'] ?>" readonly>
                                     <?php if ($this->session->userdata['role_id'][0] == '7') {
                                         echo '';
                                     } elseif ($this->session->userdata['role_id'] == '2') {
@@ -70,20 +72,30 @@
                     </tbody>
                 </table>
                 <div class="row justify-content-end">
-                    <div class="form-group">
+                    <div class="form-group" id="wadah_submit">
 
                         <?php if ($this->session->userdata['role_id'][0] == '7') {
                             echo '<button type="submit" class="btn btn-primary mr-3">Tandai telah diinput</button>';
                         } elseif ($this->session->userdata['role_id'] == '2') {
                             echo '';
                         } else {
-                            echo '<button type="submit" class="btn btn-primary mr-3">Approve</button>';
+                            echo '<button type="submit" id="submit" class="btn btn-primary mr-3">Approve</button>';
                         } ?>
 
 
                     </div>
                 </div>
-            </form>
+
+            </div>
         </div>
-    </div>
+
+        <div class="daftar_tolak" id="list_tolak">
+
+        </div>
+    </form>
 </div>
+
+<script>
+    let dataDetail = <?= json_encode($detail) ?>
+</script>
+<script src="<?= base_url('assets/'); ?>js/custom/tolak_pengajuan.js"></script>

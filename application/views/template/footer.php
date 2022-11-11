@@ -39,8 +39,6 @@
 <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
 
 
-<script src="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js"></script>
-
 <?php if ($title == 'Edit user') {
     echo '<script src="' . base_url() . 'assets/js/custom/add_role.js"></script>';
 } ?>
@@ -125,8 +123,8 @@
 
     });
 
-    const tbody = document.querySelector("tbody")
-    const carinama1 = document.getElementById("carinama")
+    var tbody = document.querySelector("tbody")
+    let carinama1 = document.getElementById("carinama")
 
     let nomorUrut = 1;
 
@@ -138,9 +136,9 @@
 
         console.log(idpegawai)
         console.log(namapegawai)
-
+        // ${nomorUrut}
         isi = `<tr class="urut">
-                <td style="width: 20px;" class="angka">${nomorUrut}</td>
+                <td style="width: 20px;" class="angka"></td> 
                 <td><input type="text" class="form-control" id="nama" name="nama[]" value="${namapegawai}" readonly> <input type="text" class="form-control d-none" id="nik" name="nik[]" value="${idpegawai}" readonly></td>
                 
                 <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="" required></td>
@@ -193,39 +191,6 @@
         }
     })
 
-    tbody.addEventListener("click", function(event) {
-        if (event.target.id == "tolak") {
-            var keterangan = prompt("ALASAN Tolak karyawan ini?");
-            if (keterangan == null) {
-                console.log('cancel');
-            } else {
-                var ok = event.target.parentElement.parentElement;
-                var iya = ok.querySelector('input');
-                var isinama = iya.getAttribute('value');
-                console.log(isinama);
-
-                var idform = `<?= $form['id'] ?>`;
-
-
-                console.log(idform);
-
-                $.ajax({
-                    type: "post",
-                    url: `<?= base_url('form/tambah_tolak/') ?>`,
-                    data: {
-                        nama: isinama,
-                        idform: idform,
-                        keterangan: keterangan
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        event.target.parentElement.parentElement.remove();
-                    }
-                });
-            }
-
-        }
-    })
 
 
     function cekdatapegawai(arr, id) {
