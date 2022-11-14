@@ -129,6 +129,7 @@ class User extends CI_Controller
     {
         $db2 = $this->load->database('database_kedua', TRUE);
         $role = $this->session->userdata['role_id'];
+        $data['departemen'] = $this->db->get('departemen')->result_array();
 
         $data['menu'] = $this->m_lembur->cari_menu($role);
         $data['role'] = $this->session->userdata['role_id'];
@@ -136,34 +137,20 @@ class User extends CI_Controller
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $tgl_mulai = $this->input->post('tgl_mulai');
         $tgl_akhir = $this->input->post('tgl_akhir');
+        $departemenpilih = $this->input->post('departemen');
+        $data['departemen_pilih'] = $departemenpilih;
 
-        if ($tgl_mulai == null) {
+
+        if (!isset($tgl_mulai) && !isset($departemenpilih)) {
             $data['lembur'] = $this->m_lembur->get_form_lembur_report();
-        } else {
-            $data['lembur'] = $this->m_lembur->get_form_lembur_report_filter($tgl_mulai, $tgl_akhir);
+        } elseif (isset($departemenpilih) && $tgl_mulai == null) {
+            $data['lembur'] = $this->m_lembur->get_form_lembur_report_filter_dept($departemenpilih);
+        } elseif (isset($departemenpilih) && isset($tgl_mulai)) {
+            $data['lembur'] = $this->m_lembur->get_form_lembur_report_filter($departemenpilih, $tgl_mulai, $tgl_akhir);
+        } elseif (isset($tgl_mulai)) {
+            $data['lembur'] = $this->m_lembur->get_form_lembur_report_filter_tgl($tgl_mulai, $tgl_akhir);
         }
 
-        $peserta = [];
-
-        foreach ($data['lembur'] as $d) {
-
-            $hasil = $this->m_lembur->get_peserta($d['id'], '6');
-            foreach ($hasil as $h) {
-                // var_dump($hasil);
-                // die;
-                $peserta[] = [
-                    'id' => $h['id_form'],
-                    'peserta' => $h['nama_user'],
-                    'nik' => $h['nik'],
-                    'departemen' => $h['departemen'],
-                    'status_kar' => $h['status_kar'],
-                    'jam_mulai' => $h['jam_mulai'],
-                    'jam_selesai' => $h['jam_selesai']
-                ];
-            }
-        };
-
-        $data['peserta'] = $peserta;
 
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);

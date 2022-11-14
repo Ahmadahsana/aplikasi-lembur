@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/jquery.mCustomScrollbar.css">
 
     <link href="<?= base_url('assets/'); ?>datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/custom/flat_picker.css">
 
     <!-- <link href="<?= base_url('assets/'); ?>datatables/css/buttons.dataTables.min.css" rel="stylesheet"> -->
 

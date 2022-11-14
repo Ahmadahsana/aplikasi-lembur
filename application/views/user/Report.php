@@ -17,6 +17,19 @@
                         <div class="col-2">
                             <input type="date" class="form-control" id="tgl_akhir" name="tgl_akhir" value="<?= set_value('tgl_akhir') ?>">
                         </div>
+                        <div class="col-1 d-flex justify-content-end">
+                            Departemen
+                        </div>
+                        <div class="col-2">
+                            <select class="form-control" name="departemen">
+                                <option disabled selected>Pilih departemen</option>
+                                <?php foreach ($departemen as $d) : ?>
+                                    <option value="<?= $d['departemen'] ?>" <?php if (set_value('departemen') == $d['departemen']) {
+                                                                                echo 'selected';
+                                                                            } ?>><?= $d['departemen'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
                         <div class="col-1">
                             <button type="submit" class="btn btn-sm btn-primary">Filter</button>
                         </div>
@@ -33,6 +46,7 @@
                                 <th>Departemen</th>
                                 <th>Jam mulai</th>
                                 <th>Jam selesai</th>
+                                <th>Durasi</th>
                                 <th>Status</th>
                                 <th>Status Karyawan</th>
                             </tr>
@@ -43,26 +57,26 @@
                             <?php
                             $no = 1;
                             foreach ($lembur as $l) : ?>
+                                <?php
+                                $time1 = strtotime($l['jam_mulai']);
+                                $time2 = strtotime($l['jam_selesai']);
+                                $difference = round(abs($time2 - $time1) / 3600, 2);
+                                ?>
 
-                                <?php foreach ($peserta as $p) : ?>
-                                    <?php if ($p['id'] == $l['id']) : ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td><?= date("d-M-Y", strtotime($l['tgl_lembur'])) ?></td>
+                                    <td><?= $l['nama_user'] ?></td>
+                                    <td><?= $l['nik'] ?></td>
+                                    <td><?= $l['departemen'] ?></td>
+                                    <td><?= $l['jam_mulai'] ?></td>
+                                    <td><?= $l['jam_selesai'] ?></td>
+                                    <td><?= $difference ?></td>
 
+                                    <td><span class="badge badge-pill badge-<?= $l['warna'] ?>"><?= $l['nama_status'] ?></span></td>
+                                    <td><?= $l['status_kar'] ?></td>
+                                </tr>
 
-                                        <tr>
-                                            <td><?= $no++ ?></td>
-                                            <td><?= date("d-M-Y", strtotime($l['tgl_lembur'])) ?></td>
-                                            <td><?= $p['peserta'] ?></td>
-                                            <td><?= $p['nik'] ?></td>
-                                            <td><?= $p['departemen'] ?></td>
-                                            <td><?= $p['jam_mulai'] ?></td>
-                                            <td><?= $p['jam_selesai'] ?></td>
-
-                                            <td><span class="badge badge-pill badge-<?= $l['warna'] ?>"><?= $l['nama_status'] ?></span></td>
-                                            <td><?= $p['status_kar'] ?></td>
-                                            <!-- <td><a href="#" title="lihat detail"><button class="btn btn-info"><i class="fa fa-eye"></i></button></a></td> -->
-                                        </tr>
-                                    <?php endif ?>
-                                <?php endforeach ?>
                             <?php endforeach ?>
 
 

@@ -37,6 +37,7 @@
 <script src="<?= base_url('assets/'); ?>datatables/js/buttons.html5.min.js"></script>
 
 <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
+<script src="<?= base_url('assets/'); ?>js/custom/flat_picker.js"></script>
 
 
 <?php if ($title == 'Edit user') {
@@ -47,22 +48,10 @@
     echo '<script src="' . base_url() . 'assets/js/custom/dodol.js"></script>';
 } ?>
 
-<!-- <script type="text/javascript">
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-        });
-    });
-</script> -->
+
+
 
 <script>
-    // var todayDate = new Date().toISOString().slice(0, 10);
-    // console.log(todayDate);
-
-    // $(document).ready(function() {
-    //     console.log('ready');
-    // });
     $('.form-check-input').on('click', function() {
         const menu_id = $(this).data('menu');
         const role_id = $(this).data('role');
@@ -141,8 +130,8 @@
                 <td style="width: 20px;" class="angka"></td> 
                 <td><input type="text" class="form-control" id="nama" name="nama[]" value="${namapegawai}" readonly> <input type="text" class="form-control d-none" id="nik" name="nik[]" value="${idpegawai}" readonly></td>
                 
-                <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="" required></td>
-                <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="" required></td>
+                <td><input type="time" class="form-control jam_custom" id="jam_mulai" name="jam_mulai[]" value="" required></td>
+                <td><input type="time" class="form-control jam_custom" id="jam_selesai" name="jam_selesai[]" value="" required></td>
                 <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="" required placeholder="Bagian"></td>
                 <td><input type="text" class="form-control" id="no_order" name="no_order[]" value="" placeholder="No order"></td>
                 <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="" required placeholder="Alasan"></td>
@@ -150,7 +139,6 @@
                 <input type="text" class="form-control" id="status_kar" name="status_kar[]" value="${unit}" hidden>
                 <input type="text" class="form-control" id="departemen" name="departemen[]" value="${departemen_pegawai}" hidden>
                 </td>
-                
                 </tr> `
         $(tbody).append(isi);
         event.preventDefault();
@@ -181,7 +169,14 @@
             }
         }
 
+        flatpickr(".jam_custom", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
 
+        $('.jam_custom').removeAttr('readonly')
 
     })
 
@@ -207,7 +202,7 @@
         return tmp;
     }
 </script>
-<!--  -->
+
 </body>
 
 </html>

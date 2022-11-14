@@ -253,22 +253,50 @@ class m_lembur extends CI_Model
 
     public function get_form_lembur_report()
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
+        $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
         $this->db->where('form_pengajuan.status', 6);
         $this->db->order_by('id', 'desc');
         return $this->db->get()->result_array();
     }
 
-    public function get_form_lembur_report_filter($tgl_mulai, $tgl_akhir)
+    public function get_form_lembur_report_filter_tgl($tgl_mulai, $tgl_akhir)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
+        $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
         $this->db->where('form_pengajuan.status', 6);
         $this->db->where('form_pengajuan.tgl_lembur >=', $tgl_mulai);
         $this->db->where('form_pengajuan.tgl_lembur <=', $tgl_akhir);
+        $this->db->order_by('id', 'desc');
+        return $this->db->get()->result_array();
+    }
+
+    public function get_form_lembur_report_filter($departemenpilih, $tgl_mulai, $tgl_akhir)
+    {
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
+        $this->db->from('form_pengajuan');
+        $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
+        $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
+        $this->db->where('form_pengajuan.status', 6);
+        $this->db->where('form_pengajuan.tgl_lembur >=', $tgl_mulai);
+        $this->db->where('form_pengajuan.tgl_lembur <=', $tgl_akhir);
+        $this->db->where('detail_form.departemen', $departemenpilih);
+        $this->db->order_by('id', 'desc');
+        return $this->db->get()->result_array();
+    }
+
+    public function get_form_lembur_report_filter_dept($departemenpilih)
+    {
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
+        $this->db->from('form_pengajuan');
+        $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
+        $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
+        $this->db->where('form_pengajuan.status', 6);
+        $this->db->where('detail_form.departemen', $departemenpilih);
         $this->db->order_by('id', 'desc');
         return $this->db->get()->result_array();
     }
