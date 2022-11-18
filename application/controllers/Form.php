@@ -52,7 +52,7 @@ class Form extends CI_Controller
 
 
         $data['form'] = $this->m_lembur->get_form($idform);
-        $data['detail'] = $this->m_lembur->get_detail_user($idform, $status);
+        $data['detail'] = $this->m_lembur->get_detail($idform, $status);
         $data['karyawan_tolak'] = $this->m_lembur->get_karyawan_tolak($idform, $status);
 
         $this->load->view('template/header', $data);
