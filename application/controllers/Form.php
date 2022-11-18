@@ -9,7 +9,7 @@ class Form extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->library('tcpdf');
+        // $this->load->library('tcpdf');
     }
 
     function detail($idform)
@@ -173,13 +173,23 @@ class Form extends CI_Controller
         $data['departemen'] = $user;
         $data['data_ttd'] = $this->m_user->get_ttd();
 
-        // var_dump($data['data_ttd']);
-        // die;
+
 
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
         $bocah_lembur = $data['detail'];
         $header_form = $data['form'];
         $tgl_lembur =  date("d-m-Y", strtotime($header_form['tgl_lembur']));
+
+        $karyawan_eng = array_filter($bocah_lembur, function ($bocah) {
+            return $bocah['status_kar'] == 'ENG';
+        });
+
+        $karyawan_os = array_filter($bocah_lembur, function ($bocah) {
+            return $bocah['status_kar'] == 'OSS_KPRS';
+        });
+
+        // var_dump($data['form']['perpanjangan']);
+        // die;
 
         // nama terang
         $ttd_dept = $this->m_lembur->cari_ttd($header_form['dept']);
@@ -275,27 +285,106 @@ class Form extends CI_Controller
             $setttdppc->setWorksheet($spreadsheet->getActiveSheet());
         }
 
+        if ($data['form']['perpanjangan'] == 1) {
+            $worksheet->setCellValue('A5', 'Perpanjangan Lembur');
+        }
+
         if ($data['departemen'][0]['departemen'] == 'Produksi') {
             $worksheet->setCellValue('C15', $ttd_ppc['nama_terang']);
         }
 
-        $row = 8;
+        $row = 9;
         $no_urut = 1;
-        $worksheet->insertNewRowBefore(9, count($bocah_lembur));
-        foreach ($bocah_lembur as $d) {
-            $worksheet->setCellValue('A' . $row, $no_urut);
-            $worksheet->setCellValue('B' . $row, $d['nama_user']);
-            $worksheet->setCellValue('C' . $row, $d['bagian']);
-            $worksheet->setCellValue('D' . $row, $d['jam_mulai']);
-            $worksheet->setCellValue('E' . $row, $d['jam_selesai']);
-            $worksheet->setCellValue('F' . $row, $d['no_order']);
-            $spreadsheet->getActiveSheet()->mergeCells('F' . $row . ':G' . $row);
-            $worksheet->setCellValue('H' . $row, $d['alasan']);
-            $spreadsheet->getActiveSheet()->mergeCells('H' . $row . ':J' . $row);
 
-            $row++;
-            $no_urut++;
+        $styleArray = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'font' => [
+                'bold' => true,
+            ]
+        ];
+        $styletengah = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'font' => [
+                'bold' => false,
+            ]
+        ];
+
+        if (count($karyawan_eng) > 0) {
+
+            $worksheet->insertNewRowBefore($row, 1);
+            $spreadsheet->getActiveSheet()->mergeCells('A' . ($row - 1) . ':J' . ($row - 1));
+            // $worksheet->getStyle('A' . ($row - 1))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            $worksheet->getStyle('A' . ($row - 1))->applyFromArray($styleArray);
+            $worksheet->setCellValue('A' . ($row - 1), 'KARYAWAN PURA');
+            $worksheet->insertNewRowBefore(($row + 1), count($karyawan_eng));
+            foreach ($karyawan_eng as $d) {
+                $worksheet->setCellValue('A' . $row, $no_urut);
+                $worksheet->setCellValue('B' . $row, $d['nama_user']);
+                $worksheet->setCellValue('C' . $row, $d['bagian']);
+                $worksheet->setCellValue('D' . $row, date("H:i", strtotime($d['jam_mulai'])));
+                $worksheet->getStyle('D' . $row)->applyFromArray($styletengah);
+                $worksheet->setCellValue('E' . $row, date("H:i", strtotime($d['jam_selesai'])));
+                $worksheet->getStyle('E' . $row)->applyFromArray($styletengah);
+                $worksheet->setCellValue('F' . $row, $d['no_order']);
+                $spreadsheet->getActiveSheet()->mergeCells('F' . $row . ':G' . $row);
+                $worksheet->setCellValue('H' . $row, $d['alasan']);
+                $spreadsheet->getActiveSheet()->mergeCells('H' . $row . ':J' . $row);
+
+                $row++;
+                $no_urut++;
+            }
         }
+
+        if (count($karyawan_os) > 0) {
+
+            if (count($karyawan_eng) == 0) {
+                $row = $row;
+            } else {
+                $row = $row + 1;
+            }
+            $worksheet->insertNewRowBefore($row, 1);
+            $spreadsheet->getActiveSheet()->mergeCells('A' . ($row - 1) . ':J' . ($row - 1));
+            $worksheet->getStyle('A' . ($row - 1))->applyFromArray($styleArray);
+            $worksheet->setCellValue('A' . ($row - 1), 'KARYAWAN OS');
+            $worksheet->insertNewRowBefore(($row), count($karyawan_os));
+            foreach ($karyawan_os as $d) {
+                $worksheet->setCellValue('A' . $row, $no_urut);
+                $worksheet->setCellValue('B' . $row, $d['nama_user']);
+                $worksheet->setCellValue('C' . $row, $d['bagian']);
+                $worksheet->setCellValue('D' . $row, date("H:i", strtotime($d['jam_mulai'])));
+                $worksheet->getStyle('D' . $row)->applyFromArray($styletengah);
+                $worksheet->setCellValue('E' . $row, date("H:i", strtotime($d['jam_selesai'])));
+                $worksheet->getStyle('E' . $row)->applyFromArray($styletengah);
+                $worksheet->setCellValue('F' . $row, $d['no_order']);
+                $spreadsheet->getActiveSheet()->mergeCells('F' . $row . ':G' . $row);
+                $worksheet->setCellValue('H' . $row, $d['alasan']);
+                $spreadsheet->getActiveSheet()->mergeCells('H' . $row . ':J' . $row);
+
+                $row++;
+                $no_urut++;
+            }
+        }
+
+        // $worksheet->insertNewRowBefore(9, count($bocah_lembur));
+        //     foreach ($bocah_lembur as $d) {
+        //         $worksheet->setCellValue('A' . $row, $no_urut);
+        //         $worksheet->setCellValue('B' . $row, $d['nama_user']);
+        //         $worksheet->setCellValue('C' . $row, $d['bagian']);
+        //         $worksheet->setCellValue('D' . $row, $d['jam_mulai']);
+        //         $worksheet->setCellValue('E' . $row, $d['jam_selesai']);
+        //         $worksheet->setCellValue('F' . $row, $d['no_order']);
+        //         $spreadsheet->getActiveSheet()->mergeCells('F' . $row . ':G' . $row);
+        //         $worksheet->setCellValue('H' . $row, $d['alasan']);
+        //         $spreadsheet->getActiveSheet()->mergeCells('H' . $row . ':J' . $row);
+
+        //         $row++;
+        //         $no_urut++;
+        //     }
+
         $worksheet->setCellValue('C3', $tgl_lembur);
 
         $spreadsheet->getActiveSheet()->removeRow($row); // delete last row template

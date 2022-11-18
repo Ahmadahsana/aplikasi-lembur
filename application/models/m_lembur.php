@@ -95,6 +95,7 @@ class m_lembur extends CI_Model
         $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
         $this->db->where('form_pengajuan.id', $id);
         $this->db->where_in('detail_form.status', $status);
+        $this->db->order_by('nama_user', 'ASC');
         return $this->db->get()->result_array();
     }
 
