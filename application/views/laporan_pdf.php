@@ -1,249 +1,141 @@
-<!DOCTYPE html>
-<html>
+<?php
+//============================================================+
+// File name   : example_011.php
+// Begin       : 2008-03-04
+// Last Update : 2013-05-14
+//
+// Description : Example 011 for TCPDF class
+//               Colored Table (very simple table)
+//
+// Author: Nicola Asuni
+//
+// (c) Copyright:
+//               Nicola Asuni
+//               Tecnick.com LTD
+//               www.tecnick.com
+//               info@tecnick.com
+//============================================================+
 
-<head>
-    <title>Form <?= $pdf['judul_keluhan']; ?></title>
-    <meta charset="utf-8">
-    <style type="text/css">
-        /* Kode CSS Untuk PAGE ini dibuat oleh http://jsfiddle.net/2wk6Q/1/ */
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #FAFAFA;
-            font: 12pt "Times New Roman";
+/**
+ * Creates an example PDF TEST document using TCPDF
+ * @package com.tecnick.tcpdf
+ * @abstract TCPDF - Example: Colored Table
+ * @author Nicola Asuni
+ * @since 2008-03-04
+ */
+
+// Include the main TCPDF library (search for installation path).
+// require_once('tcpdf_include.php');
+
+// extend TCPF with custom functions
+class MYPDF extends TCPDF
+{
+
+    // Load table data from file
+    public function LoadData($file)
+    {
+        // Read file lines
+        $lines = file($file);
+        $data = array();
+        foreach ($lines as $line) {
+            $data[] = explode(';', chop($line));
         }
+        return $data;
+    }
 
-        * {
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
+    // Colored table
+    public function ColoredTable($header, $data)
+    {
+        // Colors, line width and bold font
+        $this->setFillColor(255, 0, 0);
+        $this->setTextColor(255);
+        $this->setDrawColor(128, 0, 0);
+        $this->setLineWidth(0.3);
+        $this->setFont('', 'B');
+        // Header
+        $w = array(40, 35, 40, 45);
+        $num_headers = count($header);
+        for ($i = 0; $i < $num_headers; ++$i) {
+            $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
         }
-
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 10mm;
-            margin: 10mm auto;
-            border: 1px #D3D3D3 solid;
-            border-radius: 5px;
-            background: white;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        $this->Ln();
+        // Color and font restoration
+        $this->setFillColor(224, 235, 255);
+        $this->setTextColor(0);
+        $this->setFont('');
+        // Data
+        $fill = 0;
+        foreach ($data as $row) {
+            $this->Cell($w[0], 6, $row[0], 'LR', 0, 'L', $fill);
+            $this->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
+            $this->Cell($w[2], 6, number_format($row[2]), 'LR', 0, 'R', $fill);
+            $this->Cell($w[3], 6, number_format($row[3]), 'LR', 0, 'R', $fill);
+            $this->Ln();
+            $fill = !$fill;
         }
+        $this->Cell(array_sum($w), 0, '', 'T');
+    }
+}
 
-        .subpage {
-            /* mengatur isi dengan border */
-            padding: 0cm;
-            border: 1px black solid;
-            height: 277mm;
-            padding-left: none;
-            padding-right: 0mm;
-        }
+// create new PDF document
+$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-        .kecil {
-            font-size: 8pt;
-        }
+// set document information
+$pdf->setCreator(PDF_CREATOR);
+$pdf->setAuthor('Nicola Asuni');
+$pdf->setTitle('TCPDF Example 011');
+$pdf->setSubject('TCPDF Tutorial');
+$pdf->setKeywords('TCPDF, PDF, example, test, guide');
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+// set default header data
+$pdf->setHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 011', PDF_HEADER_STRING);
 
-        th,
-        td {
-            border: 1px solid black;
-        }
+// set header and footer fonts
+$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-        th.ok {
-            border: 0px
-        }
+// set default monospaced font
+$pdf->setDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-        td.ok {
-            border: 0px
-        }
+// set margins
+$pdf->setMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->setHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->setFooterMargin(PDF_MARGIN_FOOTER);
 
-        tr.ok {
-            border: 0px
-        }
+// set auto page breaks
+$pdf->setAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
+// set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-        @page {
-            size: A4;
-            margin: 0;
-        }
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+    require_once(dirname(__FILE__) . '/lang/eng.php');
+    $pdf->setLanguageArray($l);
+}
 
-        @media print {
+// ---------------------------------------------------------
 
-            html,
-            body {
-                width: 210mm;
-                height: 297mm;
-            }
+// set font
+$pdf->setFont('helvetica', '', 12);
 
-            .page {
-                margin: 0;
-                border: initial;
-                border-radius: initial;
-                width: initial;
-                min-height: initial;
-                box-shadow: initial;
-                background: initial;
-                page-break-after: always;
-            }
-        }
-    </style>
-</head>
+// add a page
+$pdf->AddPage();
 
-<body>
+// column titles
+$header = array('Country', 'Capital', 'Area (sq km)', 'Pop. (thousands)');
 
-    <div class="book">
-        <div class="page">
-            <div class="subpage">
-                <table>
-                    <tr>
-                        <th style="width: 38mm; height:27mm"><img width="50%" src="<?= base_url('assets/img/pura.png') ?>"><br>
-                            <div class="kecil">PT. Purabarutama Div. eng</div>
-                        </th>
-                        <th colspan="5">
-                            <h3>PERMINTAAN PERUBAHAN DATA <br> APLIKASI SIMPG-DE</h3>
-                            <div class="kecil">FM-IT-06/Rev-0/29-11-2021</div>
-                        </th>
-                    </tr>
+// data loading
+$data = $pdf->LoadData(FCPATH . 'application/libraries/tcpdf/examples/data/table_data_demo.txt');
 
-                    <tr>
-                        <td colspan="6" style=" height: 25mm;" valign="top">JENIS PERMINTAAN : <br> <br>
-                            <table>
-                                <tr>
-                                    <td class="ok" width="7%"></td>
-                                    <td class="ok"><input type="checkbox" id="vehicle1" name="vehicle1" checked> PENAMBAHAN USER</td>
-                                    <td class="ok"><input type="checkbox" id="vehicle1" name="vehicle1"> PERUBAHAN HAK AKSES USER</td>
-                                </tr>
-                                <tr>
-                                    <td class="ok"></td>
-                                    <td class="ok"><input type="checkbox" id="vehicle1" name="vehicle1"> PERUBAHAN DATA TRANSAKSI</td>
-                                    <td class="ok"><input type="checkbox" id="vehicle1" name="vehicle1"> PERUBAHAN MASTER DATA</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+// print colored table
+$pdf->ColoredTable($header, $data);
 
-                    <tr>
-                        <td class="ok" colspan="6">ALASAN/TUJUAN PERUBAHAN</td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" rowspan="2" style="height: 40mm;">a <br>
-                            <?= $pdf['judul_keluhan'] ?>
-                        </td>
-                    </tr>
-                    <tr>
+// ---------------------------------------------------------
 
-                    </tr>
+// close and output PDF document
+$pdf->Output('example_011.pdf', 'I');
 
-
-                    <tr>
-                        <td class="ok" colspan="6">URAIAN PERUBAHAN</td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" style="height: 40mm;">b <br>
-                            <?= $pdf['deskripsi_keluhan'] ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3">CATATAN :</td>
-                        <td colspan="2">Tanggal : <?= date('d F Y', $pdf['tgl_keluhan']); ?></td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3" rowspan="4">c</td>
-                        <td style="width: 20mm;">Diajukan Oleh:</td>
-                        <td style="width: 20mm;">Disetujui Oleh:</td>
-
-                    </tr>
-                    <tr>
-
-                        <td class="ok" style="height: 20mm;">d</td>
-                        <td class="ok">e</td>
-                    </tr>
-                    <tr>
-
-                        <td class="ok" style="text-align: center;"><?= $pdf['nama_pengadu'] ?></td>
-                        <td class="ok">(.........................)</td>
-
-                    </tr>
-                    <tr>
-
-                        <td>User</td>
-                        <td>Kabag ......</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">TINDAK LANJUT SISTEM ANALYS</td>
-                        <td colspan="2">Tanggal : <?= date('d F Y', $pdf['tgl_selesai']); ?></td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3" rowspan="4">f</td>
-                        <td>Menindaklanjuti:</td>
-                        <td>Menyetujui:</td>
-
-                    </tr>
-                    <tr>
-
-                        <td class="ok" style="height: 20mm;">g</td>
-                        <td class="ok">h</td>
-                    </tr>
-                    <tr>
-
-                        <td class="ok"><?= $pdf['petugas'] ?></td>
-                        <td class="ok">(.........................)</td>
-
-                    </tr>
-                    <tr>
-
-                        <td>Operator</td>
-                        <td>Kabid EDP</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">VERIFIKASI:</td>
-                        <td style="width: 20mm;">User</td>
-                        <td colspan="2">Tanggal : <?= date('d F Y', $pdf['tgl_complete']); ?></td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2" rowspan="3"><?= $pdf['verifikasi'] ?></td>
-                        <td class="ok" style="height: 20mm;">j</td>
-                        <td class="ok">k</td>
-                        <td class="ok">l</td>
-                    </tr>
-                    <tr>
-
-                        <td class="ok"><?= $pdf['nama_pengadu'] ?></td>
-                        <td class="ok">(.........................)</td>
-                        <td class="ok">(.........................)</td>
-
-                    </tr>
-                    <tr>
-
-                        <td>Bag...</td>
-                        <td>Kabag ......</td>
-                        <td>Kabag EDP</td>
-                    </tr>
-
-
-                    <!-- tr dengan td sebanyak 5 -->
-                    <!-- <tr>
-                    <td>a</td>
-                    <td>a</td>
-                    <td>a</td>
-                    <td>a</td>
-                    <td>a</td>
-                </tr> -->
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-</body>
-
-</html>
+//============================================================+
+// END OF FILE
+//============================================================+

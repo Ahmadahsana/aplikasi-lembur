@@ -24,7 +24,7 @@
 
 
                 <h4>Daftar pegawai</h4>
-                <table class="table table-hover">
+                <table class="table table-hover" id="dataTable">
                     <thead>
                         <tr>
                             <th scope="col">No</th>

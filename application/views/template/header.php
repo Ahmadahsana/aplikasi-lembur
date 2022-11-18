@@ -39,21 +39,14 @@
 
     <!-- <link href="<?= base_url('assets/'); ?>datatables/css/buttons.dataTables.min.css" rel="stylesheet"> -->
 
+    <style>
+        .table td,
+        .table th {
+            padding-right: 0.25rem;
+            padding-left: 0.25rem;
+        }
+    </style>
     <style type="text/css">
-        /* tbody .number {
-            counter-reset: rowNumber;
-        }
-
-        tbody tr .urut {
-            counter-increment: rowNumber;
-        }
-
-        tbody tr td:first-child::before {
-            content: counter(rowNumber);
-            min-width: 1em;
-            margin-right: 0.5em;
-        } */
-
         .number tr:not(.fble_htr) {
             counter-increment: rowNumber;
         }

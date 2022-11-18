@@ -116,6 +116,7 @@
     let carinama1 = document.getElementById("carinama")
 
     let nomorUrut = 1;
+    let tombolTambahBawah = 0
 
     $('#tampilcarinama').on('click', '.listcarinama', function(event) {
         let idpegawai = $(this).data('idpegawai')
@@ -139,8 +140,12 @@
                 <input type="text" class="form-control" id="status_kar" name="status_kar[]" value="${unit}" hidden>
                 <input type="text" class="form-control" id="departemen" name="departemen[]" value="${departemen_pegawai}" hidden>
                 </td>
-                </tr> `
+                </tr> `;
+        isiTombol = `<div class="col-md-1 form-group">
+                        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModal">+</button>
+                    </div>`
         $(tbody).append(isi);
+
         event.preventDefault();
         nomorUrut++
 
@@ -177,6 +182,12 @@
         });
 
         $('.jam_custom').removeAttr('readonly')
+
+        if (tombolTambahBawah == 0) {
+            // $('#tombol_bawah').append(isiTombol);
+        }
+
+        tombolTambahBawah++
 
     })
 

@@ -355,6 +355,12 @@ class User extends CI_Controller
 
     public function edit_form($idform)
     {
+        // jika status sudah tidak pending
+        // if ($this->input->post('status_form') !== 0) {
+        //     var_dump('mantappppp');
+        //     die;
+        // }
+
         // data untuk yang edit ini
         $data = [];
         foreach ($_POST['jam_selesai1'] as $key => $value) {

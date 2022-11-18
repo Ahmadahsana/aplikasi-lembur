@@ -1,9 +1,17 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+// require FCPATH . 'pdf/autoload.php';
+// require_once __DIR__ . '/vendor/autoload.php';
 
 class Form extends CI_Controller
 
 {
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->library('tcpdf');
+    }
+
     function detail($idform)
     {
         $role = $this->session->userdata['role_id'];
@@ -39,14 +47,8 @@ class Form extends CI_Controller
         $db2 = $this->load->database('database_kedua', TRUE);
         $data['title'] = 'Detail Form';
 
-        // $data['userini'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        // $user = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $id = $this->session->userdata('nik');
         $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-
-        // $status_form = $this->session->userdata('status_form');
-
-
 
 
         $data['form'] = $this->m_lembur->get_form($idform);
@@ -160,6 +162,7 @@ class Form extends CI_Controller
 
     function print($idform, $status)
     {
+        require FCPATH . 'vendor/autoload.php';
         // $data['form'] = $this->m_lembur->get_form($idform); 
         $data['form'] = $this->m_lembur->get_form_print($idform); //tak joinkan ke user
         $data['title'] = $idform;
@@ -167,17 +170,154 @@ class Form extends CI_Controller
         // $pembuat = $data['form']['nik'];
         $user = $this->m_lembur->get_departemen_form_cetak($idform);
 
-        // var_dump($user);
-        // $departemen_form = $user[0]['id_departemen'];
-        // var_dump($departemen_form);
-        // $data['departemen'] = $this->m_lembur->get_departemen($departemen_form);
         $data['departemen'] = $user;
         $data['data_ttd'] = $this->m_user->get_ttd();
 
+        // var_dump($data['data_ttd']);
+        // die;
+
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
-        // var_dump($status);
-        $this->load->view('laporan_pdf1', $data);
+        $bocah_lembur = $data['detail'];
+        $header_form = $data['form'];
+        $tgl_lembur =  date("d-m-Y", strtotime($header_form['tgl_lembur']));
+
+        // nama terang
+        $ttd_dept = $this->m_lembur->cari_ttd($header_form['dept']);
+        $ttd_ppc = $this->m_lembur->cari_ttd($header_form['ppc']);
+        $ttd_efisiensi = $this->m_lembur->cari_ttd($header_form['efisiensi']);
+        $ttd_cc = $this->m_lembur->cari_ttd($header_form['cc']);
+
+        // gambar ttd
+        $ttd_gambar_dept = FCPATH . '/assets/images/ttd/' . $ttd_dept['ttd'];
+        $ttd_gambar_efisiensi = FCPATH . '/assets/images/ttd/' . $ttd_efisiensi['ttd'];
+        $ttd_gambar_cc = FCPATH . '/assets/images/ttd/' . $ttd_cc['ttd'];
+        $ttd_gambar_ppc = FCPATH . '/assets/images/ttd/' . $ttd_ppc['ttd'];
+
+
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        // $spreadsheet = IOFactory::createReader(FCPATH.'files/template.xls');
+        if ($data['departemen'][0]['departemen'] == 'Produksi') {
+            $spreadsheet = $reader->load(FCPATH . '/assets/template_produksi.xls');
+        } else {
+            $spreadsheet = $reader->load(FCPATH . '/assets/template_1.xls');
+        }
+
+        $spreadsheet->getActiveSheet()->getPageSetup()
+            ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+        $spreadsheet->getActiveSheet()->getPageSetup()
+            ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(1);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.75);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.75);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(1);
+
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $setLogo = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $setLogo->setName('Logo');
+        $setLogo->setDescription('Logo');
+        $setLogo->setPath(FCPATH . '/assets/logo_pura.png');
+        $setLogo->setOffsetX(60);
+        $setLogo->setOffsetY(10);
+        $setLogo->setHeight(46);
+        $setLogo->setCoordinates('A1');
+        $setLogo->setWorksheet($spreadsheet->getActiveSheet());
+
+        $worksheet->setCellValue('B15', $ttd_dept['nama_terang']);
+        $worksheet->setCellValue('E15', $ttd_efisiensi['nama_terang']);
+        $worksheet->setCellValue('G15', $ttd_cc['nama_terang']);
+
+        // ttd dept
+        $setttddept = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $setttddept->setName('Logo');
+        $setttddept->setDescription('Logo');
+        $setttddept->setPath($ttd_gambar_dept);
+        $setttddept->setOffsetX(40);
+        $setttddept->setOffsetY(10);
+        $setttddept->setHeight(56);
+        $setttddept->setCoordinates('B12');
+        $setttddept->setWorksheet($spreadsheet->getActiveSheet());
+
+        // ttd efisiensi
+        $setttdefisiensi = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $setttdefisiensi->setName('Logo');
+        $setttdefisiensi->setDescription('Logo');
+        $setttdefisiensi->setPath($ttd_gambar_efisiensi);
+        $setttdefisiensi->setOffsetX(20);
+        $setttdefisiensi->setOffsetY(10);
+        $setttdefisiensi->setHeight(56);
+        $setttdefisiensi->setCoordinates('E12');
+        $setttdefisiensi->setWorksheet($spreadsheet->getActiveSheet());
+
+        // ttd cc
+        $setttdcc = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $setttdcc->setName('Logo');
+        $setttdcc->setDescription('Logo');
+        $setttdcc->setPath($ttd_gambar_cc);
+        $setttdcc->setOffsetX(55);
+        $setttdcc->setOffsetY(10);
+        $setttdcc->setHeight(65);
+        $setttdcc->setCoordinates('G12');
+        $setttdcc->setWorksheet($spreadsheet->getActiveSheet());
+
+        // ttd ppc
+        if ($data['departemen'][0]['departemen'] == 'Produksi') {
+            $setttdppc = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            $setttdppc->setName('Logo');
+            $setttdppc->setDescription('Logo');
+            $setttdppc->setPath($ttd_gambar_ppc);
+            $setttdppc->setOffsetX(30);
+            $setttdppc->setOffsetY(10);
+            $setttdppc->setHeight(65);
+            $setttdppc->setCoordinates('C12');
+            $setttdppc->setWorksheet($spreadsheet->getActiveSheet());
+        }
+
+        if ($data['departemen'][0]['departemen'] == 'Produksi') {
+            $worksheet->setCellValue('C15', $ttd_ppc['nama_terang']);
+        }
+
+        $row = 8;
+        $no_urut = 1;
+        $worksheet->insertNewRowBefore(9, count($bocah_lembur));
+        foreach ($bocah_lembur as $d) {
+            $worksheet->setCellValue('A' . $row, $no_urut);
+            $worksheet->setCellValue('B' . $row, $d['nama_user']);
+            $worksheet->setCellValue('C' . $row, $d['bagian']);
+            $worksheet->setCellValue('D' . $row, $d['jam_mulai']);
+            $worksheet->setCellValue('E' . $row, $d['jam_selesai']);
+            $worksheet->setCellValue('F' . $row, $d['no_order']);
+            $spreadsheet->getActiveSheet()->mergeCells('F' . $row . ':G' . $row);
+            $worksheet->setCellValue('H' . $row, $d['alasan']);
+            $spreadsheet->getActiveSheet()->mergeCells('H' . $row . ':J' . $row);
+
+            $row++;
+            $no_urut++;
+        }
+        $worksheet->setCellValue('C3', $tgl_lembur);
+
+        $spreadsheet->getActiveSheet()->removeRow($row); // delete last row template
+        $last =  $worksheet->getHighestRow();
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Dompdf');
+        $writer->save(FCPATH . '/assets/hasil_pdf/Form_pengajuan_' . $idform . '.pdf');
+
+        $data['path'] = base_url() . 'assets/hasil_pdf/Form_pengajuan_' . $idform . '.pdf';
+
+        // $this->load->view('laporan_pdf', $data);
+        redirect($data['path']);
     }
+
+    // function print2()
+    // {
+    //     // require_once FCPATH . '/vendor/autoload.php';
+    //     // $mpdf = new mPDF();
+    //     // $mpdf->WriteHTML('<h1>Hello world!</h1>');
+    //     // $mpdf->Output();
+    //     $this->load->view('mpdf_print');
+    // }
 
     function tambah_tolak()
     {
@@ -208,11 +348,5 @@ class Form extends CI_Controller
 
         $tambah_log = $this->m_lembur->insert_log($data);
         $this->m_lembur->hapus_detail($id_detail);
-        // if ($update > 0) {
-        //     echo 'success';
-        // } else {
-        //     echo 'gagal';
-        // }
-        // var_dump($dari_detail);
     }
 }

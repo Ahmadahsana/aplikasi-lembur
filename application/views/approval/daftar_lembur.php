@@ -48,9 +48,10 @@
                                 </td>
                                 <td><span class="badge badge-pill badge-<?= $l['warna'] ?>"><?= $l['nama_status'] ?></span></td>
                                 <td>
-                                    <a href="<?= base_url('form/print/') . $l['id'] . '/4' ?>" title="lihat detail"><button class="btn btn-sm btn-secondary"><i class="fa fa-print"></i></button></a>
+                                    <a href="<?= base_url('form/print/') . $l['id'] . '/4' ?>" title="lihat detail" target="_blank"><button class="btn btn-sm btn-secondary"><i class="fa fa-print"></i></button></a>
                                     <a href="<?= base_url('hr/approve/') . $l['id'] ?>" title="lihat detail"><button class="btn btn-sm btn-success"><i class="fa fa-check"></i></button></a>
                                     <a href="<?= base_url('hr/detail/') . $l['id'] ?>" title="lihat detail"><button class="btn btn-sm btn-info"><i class="fa fa-eye"></i>Detail</button></a>
+                                    <!-- <a href="<?= base_url('form/print2/') . $l['id'] . '/4' ?>" title="lihat detail"><button class="btn btn-sm btn-info"><i class="fa fa-eye"></i>Uji print</button></a> -->
                                 </td>
                             </tr>
                         <?php endforeach ?>

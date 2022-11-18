@@ -4,7 +4,11 @@
             <?= $this->session->flashdata('message') ?>
             <form action="<?= base_url('user/edit_form/') . $form['id'] ?>" method="POST" class="form-material">
                 <div class="form-group row">
-                    <label for="tanggal" class="col-sm-2 col-form-label">Tanggal</label>
+                    <label for="tanggal" class="col-sm-2 col-form-label">Status :</label>
+                    <div class="col-sm-10">
+                        <a href="#" class="badge badge-<?= $form['warna'] ?>"><?= $form['nama_status'] ?></a>
+                    </div>
+                    <label for="tanggal" class="col-sm-2 col-form-label">Tanggal :</label>
                     <div class="col-sm-10">
                         <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="tanggal" value="<?= $form['tgl_lembur'] ?>" readonly>
                     </div>
@@ -20,10 +24,13 @@
                         </div>
                     </div>
                 <?php endif ?>
+
+                <?php if ($form['status'] >= 4) : ?>
+                    <div class="row justify-content-end mr-4">
+                        <a href="<?= base_url('form/print/') . $form['id'] . '/' . $form['status'] ?>" class="btn btn-success"><i class="fa fa-print"></i> Print</a>
+                    </div>
+                <?php endif ?>
                 <h4>Daftar pegawai</h4>
-                <div class="row justify-content-end mb-3">
-                    <button type="button" class="btn btn-success mr-3" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tag"></i>Tambah pegawai</button>
-                </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -55,18 +62,24 @@
                                 <!-- <td></td> -->
                             </tr>
                         <?php endforeach ?>
-                        <tr>
-                            <th scope="row" colspan="8">PEGAWAI TAMBAHAN</th>
 
-
-
-                        </tr>
+                        <?php if ($form['status'] == 0) : ?>
+                            <tr>
+                                <th scope="row" colspan="8">PEGAWAI TAMBAHAN</th>
+                            </tr>
+                        <?php endif ?>
                     </tbody>
                 </table>
-                <!-- <h5>Iki tambahan cuk</h5> -->
+
+                <?php if ($form['status'] == 0) : ?>
+                    <div class="row justify-content-end mb-3">
+                        <button type="button" class="btn btn-sm btn-success mr-3" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tag"></i>Tambah pegawai</button>
+                    </div>
+                <?php endif ?>
+
                 <?php if ($form['status'] != 0) : ?>
 
-                    <h4>Daftar yang ditolak</h4>
+                    <h4>Daftar Perubahan</h4>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -98,8 +111,11 @@
                             <?php endforeach ?>
                         </tbody>
                     </table>
-
                 <?php endif ?>
+
+                <!-- cuma untuk mengirim ke belakang / alat bantu saja -->
+                <input type="text" name="status_form" class="d-none" value="<?= $form['status'] ?>">
+                <!-- akhirrrr -->
 
                 <?php if ($form['status'] == 0) : ?>
                     <div class="row justify-content-end">
@@ -136,7 +152,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
             </div>
         </div>
     </div>
@@ -152,6 +167,8 @@
     let tgl = waktu.getDate();
     tanggal.setAttribute("min", d.toISOString().slice(0, 10));
 </script>
+
+<!-- menonaktifkan tombol enter -->
 <script type="text/javascript">
     window.addEventListener('keydown', function(e) {
         if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {

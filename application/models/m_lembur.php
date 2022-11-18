@@ -73,9 +73,10 @@ class m_lembur extends CI_Model
 
     function get_form($id)
     {
-        $this->db->select('*');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, form_pengajuan.perpanjangan, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
-        $this->db->where('id', $id);
+        $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
+        $this->db->where('form_pengajuan.id', $id);
         return $this->db->get()->row_array();
     }
 
@@ -473,5 +474,13 @@ class m_lembur extends CI_Model
     {
         $this->db->where('id', $id_detail);
         $this->db->delete('detail_form');
+    }
+
+    function cari_ttd($username)
+    {
+        $this->db->select('*');
+        $this->db->from('ttd');
+        $this->db->where('username', $username);
+        return $this->db->get()->row_array();
     }
 }
