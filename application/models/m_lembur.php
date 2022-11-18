@@ -99,6 +99,16 @@ class m_lembur extends CI_Model
         return $this->db->get()->result_array();
     }
 
+    function get_detail_user($id, $status)
+    {
+        $this->db->select('*');
+        $this->db->from('form_pengajuan');
+        $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
+        $this->db->where('form_pengajuan.id', $id);
+        $this->db->where_in('detail_form.status', $status);
+        return $this->db->get()->result_array();
+    }
+
     function get_detail_hr($id, $status)
     {
         $this->db->select('*');
