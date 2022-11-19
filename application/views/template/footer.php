@@ -36,7 +36,7 @@
 <script src="<?= base_url('assets/'); ?>datatables/js/pdfmake.min.js"></script>
 <script src="<?= base_url('assets/'); ?>datatables/js/buttons.html5.min.js"></script>
 
-<script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
+<script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js?19112022"></script>
 <script src="<?= base_url('assets/'); ?>js/custom/flat_picker.js"></script>
 
 
