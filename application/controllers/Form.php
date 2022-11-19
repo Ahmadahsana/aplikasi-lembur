@@ -201,7 +201,9 @@ class Form extends CI_Controller
         $ttd_gambar_dept = FCPATH . '/assets/images/ttd/' . $ttd_dept['ttd'];
         $ttd_gambar_efisiensi = FCPATH . '/assets/images/ttd/' . $ttd_efisiensi['ttd'];
         $ttd_gambar_cc = FCPATH . '/assets/images/ttd/' . $ttd_cc['ttd'];
-        $ttd_gambar_ppc = FCPATH . '/assets/images/ttd/' . $ttd_ppc['ttd'];
+        if ($data['departemen'][0]['departemen'] == 'Produksi') {
+            $ttd_gambar_ppc = FCPATH . '/assets/images/ttd/' . $ttd_ppc['ttd'];
+        }
 
 
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
