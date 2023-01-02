@@ -10,6 +10,7 @@
                                 <tr class="text-center">
                                     <th>No</th>
                                     <th>Nama</th>
+                                    <th>Departemen</th>
                                     <th>Username</th>
                                     <th>Opsi</th>
                                 </tr>
@@ -17,13 +18,13 @@
 
                             <tbody>
                                 <?php $no = 1;
-                                // var_dump($daftar_user);
 
                                 foreach ($daftar_user as $l) : ?>
 
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><?= $l['name'] ?></td>
+                                        <td><?= $l['departemen'] ?></td>
                                         <td><?= $l['username'] ?></td>
                                         <td class="text-center"><a href=" <?= base_url('admin/edit_user/') . $l['nik'] ?>" title="lihat detail"><button class="btn btn-sm btn-info"><i class="fa fa-eye"></i>Detail</button></a></td>
                                     </tr>

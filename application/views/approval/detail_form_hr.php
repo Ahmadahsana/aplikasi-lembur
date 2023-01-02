@@ -48,8 +48,8 @@
                                 <td><input type="text" name="nama[]" class="form-control" value="<?= $d['nama_user'] ?>" readonly></td>
                                 <td><input type="text" name="nik[]" class="form-control" value="<?= $d['nik'] ?>" readonly></td>
                                 <td><input type="text" name="no_order[]" class="form-control" value="<?= $d['no_order'] ?>"></td>
-                                <td><input type="time" class="form-control" id="jam_mulai" name="jam_mulai[]" value="<?= $d['jam_mulai'] ?>"></td>
-                                <td><input type="time" class="form-control" id="jam_selesai" name="jam_selesai[]" value="<?= $d['jam_selesai'] ?>"></td>
+                                <td><input type="text" class="form-control time" id="jam_mulai" name="jam_mulai[]" value="<?= $d['jam_mulai'] ?>"></td>
+                                <td><input type="text" class="form-control time" id="jam_selesai" name="jam_selesai[]" value="<?= $d['jam_selesai'] ?>"></td>
                                 <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="<?= $d['bagian'] ?>"></td>
                                 <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="<?= $d['alasan'] ?>"></td>
                                 <td>

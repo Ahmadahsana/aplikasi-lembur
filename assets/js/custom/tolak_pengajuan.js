@@ -2,9 +2,11 @@
     let penanda = 0
     let angkaUrut = 1
     let tombol_tolak = dataDetail.length
-    tbody.addEventListener("click", function(event) {
+
+    $('table').on('click', 'tr', function(event) {
 
         if (event.target.id == "tolak") {
+            let idxRow = this.rowIndex;
             var keterangan = prompt("ALASAN Tolak karyawan ini?");
             if (keterangan == null) {
                 // console.log('cancel');
@@ -12,31 +14,18 @@
                 var ok = event.target.parentElement.parentElement;
                 var iya = ok.querySelector('input');
                 var isinama = iya.getAttribute('value');
-                // console.log(isinama);
+                
 
-                var idform = `<?= $form['id'] ?>`;
+                var idform = formId;
 
                 let idDetail = event.target.parentElement.children[0].value;
 
                 let index = dataDetail.findIndex(dd => dd.id == idDetail);
 
+                
                 let dataIni = dataDetail[index]
-
-                // console.log(dataIni);
-                // $.ajax({
-                //     type: "post",
-                //     url: `<?= base_url('form/tambah_tolak/') ?>`,
-                //     data: {
-                //         nama: isinama,
-                //         idform: idform,
-                //         keterangan: keterangan
-                //     },
-                //     success: function(response) {
-                //         console.log(response);
-                //         event.target.parentElement.parentElement.remove();
-                //     }
-                // });
-
+                
+                // console.log(idform);
 
                 if (penanda == 0) {
                     var list_tolak = document.querySelector('#list_tolak');
@@ -80,7 +69,7 @@
                                                         <td>
                                                             ${keterangan}
                                                             <input type="text" name="id_detail_tolak[]" class="form-control d-none" value="${dataIni.id}" readonly>
-                                                            <input type="text" name="id_form_tolak[]" class="form-control d-none" value="${dataIni.id_form}" readonly>
+                                                            <input type="text" name="id_form_tolak[]" class="form-control d-none" value="${idform}" readonly>
                                                             <input type="text" name="nama_tolak[]" class="form-control d-none" value="${dataIni.nama_user}" readonly>
                                                             <input type="text" name="nik_tolak[]" class="form-control d-none" value="${dataIni.nik}" readonly>
                                                             <input type="time" class="form-control d-none" id="jam_mulai" name="jam_mulai_tolak[]" value="${dataIni.jam_mulai}">
@@ -103,6 +92,15 @@
                     $('#submit').remove()
                     $('#wadah_submit').append('<button type="submit" id="submit" class="btn btn-danger mr-3">Tolak pengajuan</button>')
                 }
+
+                // console.log(total_harga_lembur);
+                total_harga_lembur.splice(idxRow-1, 1)
+                // console.log(total_harga_lembur);
+
+                var hasil_jumlah_tarif = total_harga_lembur.reduce((a, b) => a + b, 0);
+
+                $('#total_tarif_lembur').html(Rupiah.format( hasil_jumlah_tarif));
+
             }
 
         }

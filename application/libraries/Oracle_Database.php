@@ -8,7 +8,7 @@ class Oracle_Database
     {
 
         // connect to oracle database
-        $this->dbConnect = oci_connect("payroll_report", "Payroll123", "//192.168.16.9/PAYROLLWKS");
+        $this->dbConnect = oci_connect("payroll_report", "Payroll123!", "//192.168.16.9/PAYROLLWKS");
         if ($this->dbConnect) {
         } else {
             echo "Connection Failed";

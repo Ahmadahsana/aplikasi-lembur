@@ -7,7 +7,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="tanggal">Tanggal lembur</label>
-                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= set_value('tanggal') ?>" required>
+                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= set_value('tanggal') ?>" required autofocus>
                         <small class="text-danger"><?= form_error('tanggal') ?></small>
                     </div>
                     <div class="form-group col-md-6  align-self-end">
@@ -41,19 +41,37 @@
                             <th scope="col">Opsi</th>
                         </tr>
                     </thead>
-                    <tbody class="number">
+                    <tbody class="number" id="tbody">
 
                         <small class="text-danger"><?= form_error('nik[]') ?></small>
-                        <!-- <div class="alert alert-danger" role="alert">
-                            <?= form_error('nik[]') ?>
-                        </div> -->
+                        <tr class="urut">
+                            <td style="width: 20px;" class="angka">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control carinama" id="nama" name="nama[]" value="" list="hasilcarinama" autocomplete="off" required>
+                                <div id="peringatan"></div>
+                            </td>
+                            <datalist id="hasilcarinama" class="hasilcarinama"></datalist>
+                            <td><input type="text" class="form-control time" id="jam_mulai" name="jam_mulai[]" value="" required></td>
+                            <td>
+                                <input type="text" class="form-control time validasi_waktu" id="jam_selesai" name="jam_selesai[]" value="" required>
+                                <div id="peringatan_jam"></div>
+                            </td>
+                            <td><input type="text" class="form-control" id="bagian" name="bagian[]" value="" required placeholder="Bagian"></td>
+                            <td><input type="text" class="form-control" id="no_order" name="no_order[]" value="" placeholder="No order"></td>
+                            <td><input type="text" class="form-control" id="alasan" name="alasan[]" value="" required placeholder="Alasan"></td>
+                            <td id="tombol_copy" style="text-align: center;">
+                                <button type="button" class="btn btn-success btn-sm mr-1" id="btncopy" data-id="${idpegawai}">copy</button>
+                                <button type="button" class="btn btn-danger btn-sm mr-1" id="btnhapus" data-id="${idpegawai}"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
                     </tbody>
 
                 </table>
                 <div class="row justify-content-end align-item-center mr-1" id="tombol_bawah">
                     <div class="form-group col-md-4 ">
                         <div class="row justify-content-end">
-                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tag"></i>Tambah pegawai</button>
+                            <button type="button" class="btn btn-sm btn-success" id="tambah_pegawai"><i class="fa fa-tag"></i>Tambah pegawai</button>
                         </div>
                     </div>
                 </div>
@@ -84,7 +102,7 @@
                 <form action="" method="POST">
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Cari nama pegawai</label>
-                        <input type="text" class="form-control" id="carinama" name="carinama" placeholder="cari">
+                        <input type="text" class="form-control carinama" id="carinama" name="carinama" placeholder="cari">
                     </div>
                 </form>
                 <div id="tampilcarinama">
@@ -118,3 +136,8 @@
         }
     }, true);
 </script>
+
+<script>
+
+</script>
+<!-- <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery/jquery.min.js "></script> -->

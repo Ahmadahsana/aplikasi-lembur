@@ -5,10 +5,7 @@
     <title><?= $title ?></title>
     <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 10]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
+
     <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -38,6 +35,13 @@
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/custom/flat_picker.css">
 
     <!-- <link href="<?= base_url('assets/'); ?>datatables/css/buttons.dataTables.min.css" rel="stylesheet"> -->
+
+    <style type="text/css">
+        .bootstrap-timepicker-meridian,
+        .meridian-column {
+            display: none;
+        }
+    </style>
 
     <style>
         .table td,
@@ -77,6 +81,19 @@
         }
     </style>
 
+    <script>
+        let daftar_pegawai = []
+    </script>
+    <script>
+        var total_harga_lembur = []
+
+        let Rupiah = new Intl.NumberFormat('id', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+    </script>
 </head>
 
 <body>

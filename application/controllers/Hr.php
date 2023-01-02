@@ -220,4 +220,47 @@ class Hr extends CI_Controller
         $this->load->view('approval/detail_approve_hr', $data);
         $this->load->view('template/footer', $data);
     }
+
+    function pegawai_sementara()
+    {
+        $role = $this->session->userdata['role_id'];
+        $db2 = $this->load->database('database_kedua', TRUE);
+        $data['role'] = $this->session->userdata['role_id'];
+        $data['menu'] = $this->m_lembur->cari_menu($role);
+        $data['title'] = 'Pegawai sementara';
+        $data['user'] = $db2->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+        $data['departemen'] = $this->m_lembur->daftar_departemen();
+        $data['pegawai'] = $this->m_lembur->daftar_pegawai_sementara();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/topbar', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('hr/pegawai_sementara', $data);
+        $this->load->view('template/footer', $data);
+    }
+
+    function tambah_pegawai()
+    {
+        $nama = $this->input->post('nama');
+        $bagian = $this->input->post('bagian');
+        $unit = $this->input->post('unit');
+        $nik = 'SM-' . rand(01111, 99999);
+
+        $data = [
+            'Nm_Karyawan' => strtoupper($nama),
+            'NIK' => $nik,
+            'Kd_bagian' => $bagian,
+            'Kd_Unit' => $unit,
+            'status' => 1,
+            'created' => date('Y-m-d'),
+            'modified' => date('Y-m-d'),
+        ];
+
+        $this->db->insert('karyawan_sementara', $data);
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            Berhasil input
+            </div>');
+        redirect('hr/pegawai_sementara');
+    }
 }

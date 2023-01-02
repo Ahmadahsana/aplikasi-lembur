@@ -2,7 +2,9 @@
     <div class="card">
         <div class="card-body">
             <?= $this->session->flashdata('message') ?>
-            <form action="<?= base_url('user/edit_form/') . $form['id'] ?>" method="POST" class="form-material">
+            <!-- <?php var_dump($form['status']) ?> -->
+
+            <form action="<?= base_url('user/edit_form/') . $form['id'] ?>" method="POST" class="">
                 <div class="form-group row">
                     <label for="tanggal" class="col-sm-2 col-form-label">Status :</label>
                     <div class="col-sm-10">
@@ -30,50 +32,58 @@
                         <a href="<?= base_url('form/print/') . $form['id'] . '/' . $form['status'] ?>" class="btn btn-success"><i class="fa fa-print"></i> Print</a>
                     </div>
                 <?php endif ?>
+
+                <datalist id="hasilcarinama" class="hasilcarinama"> </datalist>
+
                 <h4>Daftar pegawai</h4>
-                <table class="table table-hover">
+                <table class="table table-sm">
                     <thead>
                         <tr>
                             <th scope="col">No</th>
                             <th scope="col">Nama</th>
-                            <!-- <th scope="col">NIK</th> -->
-                            <th scope="col" style="width: 140px;">Jam mulai</th>
-                            <th scope="col" style="width: 140px;">Jam selesai</th>
+                            <th scope="col" style="width: 7%;">Jam mulai</th>
+                            <th scope="col" style="width: 7%;">Jam selesai</th>
                             <th scope="col">Bagian</th>
-                            <th scope="col">NO Order</th>
+                            <th scope="col" style="width: 10%;">NO Order</th>
                             <th scope="col">Alasan</th>
-                            <!-- <th scope="col">Opsi</th> -->
-
+                            <th scope="col">Opsi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="number">
                         <?php $no = 1; ?>
-                        <?php foreach ($detail as $d) :
-                        ?>
+                        <?php foreach ($detail as $d) : ?>
                             <tr>
                                 <th scope="row"><?= $no++ ?></th>
-                                <td class="page"><input type="text" name="nama1[]" class="form-control" value="<?= $d['nama_user'] ?>" readonly></td>
-                                <!-- <td class="page"><input type="text" name="nik[]" class="form-control" value="<?= $d['nik'] ?>" readonly></td> -->
-                                <td class="page"><input type="time" class="form-control" id="jam_mulai" name="jam_mulai1[]" value="<?= $d['jam_mulai'] ?>"></td>
-                                <td class="page"><input type="time" class="form-control" id="jam_selesai" name="jam_selesai1[]" value="<?= $d['jam_selesai'] ?>"></td>
-                                <td class="page"><input type="text" class="form-control" id="bagian" name="bagian1[]" value="<?= $d['bagian'] ?>"></td>
-                                <td class="page"><input type="text" name="no_order1[]" class="form-control" value="<?= $d['no_order'] ?>"></td>
-                                <td class="page"><input type="text" class="form-control" id="alasan" name="alasan1[]" value="<?= $d['alasan'] ?>"></td>
-                                <!-- <td></td> -->
+                                <td><input type="text" name="nama1[]" class="form-control" value="<?= $d['nama_user'] ?>" readonly></td>
+                                <td><input type="text" class="form-control time" id="jam_mulai" name="jam_mulai1[]" value="<?= date("H:i", strtotime($d['jam_mulai'])) ?>"></td>
+                                <td><input type="text" class="form-control time" id="jam_selesai" name="jam_selesai1[]" value="<?= $d['jam_selesai'] ?>">
+                                    <div id="peringatan"></div>
+                                </td>
+                                <td><input type="text" class="form-control" id="bagian" name="bagian1[]" value="<?= $d['bagian'] ?>"></td>
+                                <td><input type="text" name="no_order1[]" class="form-control" value="<?= $d['no_order'] ?>"></td>
+                                <td><input type="text" class="form-control" id="alasan" name="alasan1[]" value="<?= $d['alasan'] ?>"></td>
+                                <td id="tombol_copy" style="text-align: center;">
+                                    <?php if ($form['status'] == '0') : ?>
+                                        <button type="button" class="btn btn-danger btn-sm" id="btnhapus1" data-id="<?= $d['id'] ?>"><i class="fa fa-trash"></i></button>
+                                    <?php endif ?>
+                                </td>
                             </tr>
+                            <script>
+                                daftar_pegawai.push(`<?= $d['nik'] ?>`)
+                            </script>
                         <?php endforeach ?>
 
-                        <?php if ($form['status'] == 0) : ?>
+                        <!-- <?php if ($form['status'] == 0) : ?>
                             <tr>
                                 <th scope="row" colspan="8">PEGAWAI TAMBAHAN</th>
                             </tr>
-                        <?php endif ?>
+                        <?php endif ?> -->
                     </tbody>
                 </table>
 
                 <?php if ($form['status'] == 0) : ?>
                     <div class="row justify-content-end mb-3">
-                        <button type="button" class="btn btn-sm btn-success mr-3" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-tag"></i>Tambah pegawai</button>
+                        <button type="button" class="btn btn-sm btn-success mr-3" id="tambah_pegawai"><i class="fa fa-tag"></i>Tambah pegawai</button>
                     </div>
                 <?php endif ?>
 
@@ -86,9 +96,11 @@
                                 <td scope="col">No</td>
                                 <th scope="col">Nama</th>
                                 <th scope="col">NIK</th>
-                                <th scope="col">Bagian</th>
+                                <th scope="col">No order</th>
                                 <th scope="col" style="width: 140px;">Jam mulai</th>
                                 <th scope="col" style="width: 140px;">Jam selesai</th>
+                                <th scope="col">Bagian</th>
+                                <th scope="col">Jenis Perubahan</th>
                                 <th scope="col">Alasan tolak</th>
                                 <!-- <th scope="col">Opsi</th> -->
 
@@ -99,13 +111,19 @@
                             <?php foreach ($karyawan_tolak as $t) :
                             ?>
                                 <tr>
-                                    <td scope="row"></td>
-                                    <td><input type="text" name="" class="form-control" value="<?= $t['nama_user'] ?>" readonly></td>
-                                    <td><input type="text" name="" class="form-control" value="<?= $t['nik'] ?>" readonly></td>
-                                    <td><input type="text" name="" class="form-control" value="<?= $d['bagian'] ?>"></td>
-                                    <td><input type="time" class="form-control" id="jam_mulai" name="" value="<?= $t['jam_mulai'] ?>"></td>
-                                    <td><input type="time" class="form-control" id="jam_selesai" name="" value="<?= $t['jam_selesai'] ?>"></td>
-                                    <td><input type="text" name="" class="form-control" value="<?= $t['keterangan'] ?>" readonly></td>
+                                    <td scope="row"><?= $no++ ?></td>
+                                    <td><?= $t['nama_user'] ?></td>
+                                    <td><?= $t['nik'] ?></td>
+                                    <td><?= $t['no_order'] ?></td>
+                                    <td><?= $t['jam_mulai'] ?></td>
+                                    <td><?= $t['jam_selesai'] ?></td>
+                                    <td><?= $t['bagian'] ?></td>
+                                    <td><span class="badge badge-pill <?php if ($t['jenis_log'] == 1) {
+                                                                            echo 'badge-success';
+                                                                        } else {
+                                                                            echo 'badge-danger';
+                                                                        } ?> "><?= $t['nama_log'] ?></span></td>
+                                    <td><?= $t['keterangan'] ?></td>
                                     <!-- <td></td> -->
                                 </tr>
                             <?php endforeach ?>

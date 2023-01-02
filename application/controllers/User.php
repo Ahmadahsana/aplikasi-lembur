@@ -19,6 +19,7 @@ class User extends CI_Controller
         $role = $this->session->userdata['role_id'];
         $data['menu'] = $this->m_lembur->cari_menu($role);
         $data['role'] = $this->session->userdata['role_id'];
+        $departemen = $this->session->userdata['departemen'];
 
         $db2 = $this->load->database('database_kedua', TRUE);
         $data['title'] = 'Pengajuan lembur';
@@ -27,13 +28,12 @@ class User extends CI_Controller
         // $user = $this->db->get_where('tb_user', ['username' => $this->session->userdata('username')])->row_array();
         $user = $this->session->userdata('name');
 
-
         $tanggal = $this->input->post('tanggal');
         $alasan = $this->input->post('alasan');
         $perpanjangan = $this->input->post('perpanjangan');
         $nik = $this->session->userdata('nik');
 
-        // var_dump($nik);
+        // var_dump($perpanjangan);
         // die;
         // $jam_mulai = $this->input->post('timemulai');
         // $jam_selesai = $this->input->post('timeselesai');
@@ -48,49 +48,97 @@ class User extends CI_Controller
         ];
 
         $this->form_validation->set_rules('tanggal', 'Tanggal', 'required|trim');
-        // $this->form_validation->set_rules('timemulai', 'timemulai', 'required|trim');
-        // $this->form_validation->set_rules('timeselesai', 'timeselesai', 'required|trim');
-        // $this->form_validation->set_rules('alasan', 'alasan', 'required|trim');
         $this->form_validation->set_rules('nama[]', 'nama', 'required|trim', ['required' => 'harus mengisi karyawan']);
 
         if ($this->form_validation->run() == true) {
-
             $dataform = [
                 'pembuat' => $user,
                 'nik_h' => $nik,
+                'departemen' => $departemen,
                 'tgl_lembur' => $tanggal,
                 'status' => 0,
                 'perpanjangan' => $perpanjangan
             ];
 
-            $insert1 = $this->m_lembur->insert_lembur($dataform);
+            // mencari pengajuan lembur dengan tgl yang sama
+            $cari_pengajuan = $this->m_lembur->cari_pengajuan($tanggal, $departemen);
 
-            $result = array();
-            foreach ($_POST['nama'] as $key => $val) {
-                $result[] = array(
-                    'id_form' => $insert1,
-                    'nama_user' => $_POST['nama'][$key],
-                    'nik' => $_POST['nik'][$key],
-                    'jam_mulai' => $_POST['jam_mulai'][$key],
-                    'jam_selesai' => $_POST['jam_selesai'][$key],
-                    'departemen' => $_POST['departemen'][$key],
-                    'status_kar' => $_POST['status_kar'][$key],
-                    'bagian' => $bagian[$key],
-                    'no_order' => $_POST['no_order'][$key],
-                    'alasan' => $_POST['alasan'][$key],
-                    'status' => 0
-                );
+            // mengecek lembur di tgl yang sama dan perpanjangan
+            $cari_perpanjangan = $this->m_lembur->cari_perpanjangan($tanggal, $departemen);
+
+            if ($perpanjangan) {
+                if ($cari_perpanjangan) {
+                    // jika sudah ada perpanjangan
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                    Perpanjangan lembur untuk hari ini telah habis
+                    </div>');
+
+                    redirect('user');
+                } else {
+                    // jika belum ada pengajuan dengan tgl yang sama
+                    $insert1 = $this->m_lembur->insert_lembur($dataform);
+
+                    $result = array();
+                    foreach ($_POST['nama'] as $key => $val) {
+                        $result[] = array(
+                            'id_form' => $insert1,
+                            'nama_user' => $_POST['nama'][$key],
+                            'nik' => $_POST['nik'][$key],
+                            'jam_mulai' => $_POST['jam_mulai'][$key],
+                            'jam_selesai' => $_POST['jam_selesai'][$key],
+                            'departemen' => $_POST['departemen'][$key],
+                            'status_kar' => $_POST['status_kar'][$key],
+                            'bagian' => $bagian[$key],
+                            'no_order' => $_POST['no_order'][$key],
+                            'alasan' => $_POST['alasan'][$key],
+                            'status' => 0
+                        );
+                    }
+
+                    $this->db->insert_batch('detail_form', $result);
+                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                        pengajuan lembur berhasil dikirim
+                        </div>');
+
+                    redirect('user');
+                }
+            } else {
+                if ($cari_pengajuan) {
+                    // jika sudah ada pengajuan
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                    Jatah pengajuan lembur untuk hari ini telah habis
+                    </div>');
+
+                    redirect('user');
+                } else {
+                    // jika belum ada pengajuan dengan tgl yang sama
+                    $insert1 = $this->m_lembur->insert_lembur($dataform);
+
+                    $result = array();
+                    foreach ($_POST['nama'] as $key => $val) {
+                        $result[] = array(
+                            'id_form' => $insert1,
+                            'nama_user' => $_POST['nama'][$key],
+                            'nik' => $_POST['nik'][$key],
+                            'jam_mulai' => $_POST['jam_mulai'][$key],
+                            'jam_selesai' => $_POST['jam_selesai'][$key],
+                            'departemen' => $_POST['departemen'][$key],
+                            'status_kar' => $_POST['status_kar'][$key],
+                            'bagian' => $bagian[$key],
+                            'no_order' => $_POST['no_order'][$key],
+                            'alasan' => $_POST['alasan'][$key],
+                            'status' => 0
+                        );
+                    }
+
+                    $this->db->insert_batch('detail_form', $result);
+                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                        pengajuan lembur berhasil dikirim
+                        </div>');
+
+                    redirect('user');
+                }
             }
-
-            // var_dump($result);
-            // die;
-
-            $this->db->insert_batch('detail_form', $result);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-            pengajuan lembur berhasil dikirim
-            </div>');
-
-            redirect('user');
         } else {
 
             $this->load->view('template/header', $data);
@@ -366,11 +414,11 @@ class User extends CI_Controller
         foreach ($_POST['jam_selesai1'] as $key => $value) {
             $nama = $_POST['nama1'][$key];
             $data = [
-                'nama_user' => $_POST['nama1'][$key],
                 'jam_mulai' => $_POST['jam_mulai1'][$key],
                 'jam_selesai' => $_POST['jam_selesai1'][$key],
                 'bagian' => $_POST['bagian1'][$key],
                 'no_order' => $_POST['no_order1'][$key],
+                'alasan' => $_POST['alasan1'][$key],
             ];
 
             $this->m_lembur->update_status($idform, $nama, $data);
@@ -407,12 +455,16 @@ class User extends CI_Controller
     function get_nama()
     {
         $nama = $this->input->post('carinama');
-        // $nama = 'NAID';
         $string_nama = "'%" . $nama . "%'";
         $query = 'SELECT NIK , "Nm_Karyawan" , "Kd_Jabatan" ,"Kd_Bagian", "Kd_Unit" FROM PAYROLLWKS."Karyawan" WHERE "IsActive" = 1 AND "Nm_Karyawan"  LIKE ' . $string_nama;
         $hasil = $this->OD->query($query);
+        $tanggal = date('Y-m-d', strtotime('-7 days'));
+
+        if (empty($hasil)) {
+            $hasil = $this->m_lembur->daftar_pegawai_sementara1($nama, $tanggal);
+        }
         // $cari = $this->m_lembur->get_nama($nama);
         echo json_encode($hasil);
-        // var_dump($hasil);
+        // var_dump($tanggal);
     }
 }

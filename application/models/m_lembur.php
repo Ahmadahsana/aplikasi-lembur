@@ -27,7 +27,7 @@ class m_lembur extends CI_Model
 
     function get_form_lembur($status)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where_in('form_pengajuan.status', $status);
@@ -37,7 +37,7 @@ class m_lembur extends CI_Model
 
     function get_form_lembur_manager($status)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where_in('form_pengajuan.status', $status);
@@ -48,7 +48,7 @@ class m_lembur extends CI_Model
 
     function get_form_lembur_hr($status)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where_in('form_pengajuan.status', $status);
@@ -58,13 +58,10 @@ class m_lembur extends CI_Model
 
     function get_form_lembur_departemen($status, $departemen)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.tgl_lembur, form_pengajuan.status,  status_f.nama_status, status_f.warna');
-        $this->db->from('form_pengajuan');;
-        // $this->db->join('tb_user', 'form_pengajuan.nik = tb_user.nik');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.tgl_lembur, form_pengajuan.status,  status_f.nama_status, status_f.warna');
+        $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
-        // $this->db->join('tb_grup_jabatan', 'form_pengajuan.nik_h = tb_grup_jabatan.nik');
         $this->db->join('view_departemen_form', 'view_departemen_form.id_form = form_pengajuan.id');
-        // $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
         $this->db->where('form_pengajuan.status', $status);
         $this->db->where_in('id_dept', $departemen);
         $this->db->order_by('form_pengajuan.id', 'desc');
@@ -73,7 +70,7 @@ class m_lembur extends CI_Model
 
     function get_form($id)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, form_pengajuan.perpanjangan, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, form_pengajuan.perpanjangan, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('form_pengajuan.id', $id);
@@ -88,11 +85,31 @@ class m_lembur extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    function get_detail($id, $status)
+    function cari_pengajuan($tanggal, $departemen)
     {
         $this->db->select('*');
         $this->db->from('form_pengajuan');
+        $this->db->where('departemen', $departemen);
+        $this->db->where('tgl_lembur', $tanggal);
+        return $this->db->get()->row_array();
+    }
+
+    function cari_perpanjangan($tanggal, $departemen)
+    {
+        $this->db->select('*');
+        $this->db->from('form_pengajuan');
+        $this->db->where('departemen', $departemen);
+        $this->db->where('tgl_lembur', $tanggal);
+        $this->db->where('perpanjangan', 1);
+        return $this->db->get()->row_array();
+    }
+
+    function get_detail($id, $status)
+    {
+        $this->db->select('detail_form.id, nama_user, nik, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.departemen, detail_form.no_order, bagian, detail_form.alasan, view_durasi_lembur.durasi, detail_form.status_kar, detail_form.status');
+        $this->db->from('form_pengajuan');
         $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
+        $this->db->join('view_durasi_lembur', 'detail_form.id = view_durasi_lembur.id');
         $this->db->where('form_pengajuan.id', $id);
         $this->db->where_in('detail_form.status', $status);
         // $this->db->order_by('nama_user', 'ASC');
@@ -122,10 +139,10 @@ class m_lembur extends CI_Model
     function get_karyawan_tolak($idform, $status)
     {
         $this->db->select('*');
-        $this->db->from('form_pengajuan');
-        $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
-        $this->db->where('form_pengajuan.id', $idform);
-        $this->db->where('detail_form.status <', $status);
+        $this->db->from('log_perubahan');
+        $this->db->join('jenis_log', 'log_perubahan.jenis_log = jenis_log.id');
+        $this->db->where('id_form', $idform);
+        // $this->db->where('detail_form.status <', $status);
         return $this->db->get()->result_array();
     }
 
@@ -170,6 +187,32 @@ class m_lembur extends CI_Model
         return $this->db->get()->result_array();
     }
 
+    function daftar_pegawai_sementara()
+    {
+        $this->db->select('*');
+        $this->db->from('karyawan_sementara');
+        // $this->db->where('status', 1);
+        return $this->db->get()->result_array();
+    }
+
+    function daftar_pegawai_sementara1($nama, $tanggal)
+    {
+        $this->db->select('*');
+        $this->db->from('karyawan_sementara');
+        $this->db->where('status', 1);
+        $this->db->where('created >', $tanggal);
+        $this->db->like('Nm_Karyawan', $nama);
+        return $this->db->get()->result_array();
+    }
+
+    function get_tarif($idform)
+    {
+        $this->db->select('*');
+        $this->db->from('view_durasi_per_form');
+        $this->db->where('id_form', $idform);
+        return $this->db->get()->row_array();
+    }
+
     public function get_daftar_user()
     {
         $db2 = $this->load->database('database_kedua', TRUE);
@@ -181,7 +224,7 @@ class m_lembur extends CI_Model
 
     public function get_riwayat_pengajuan($nik)
     {
-        $this->db->select('form_pengajuan.id, pembuat, tgl_lembur, alasan, status, nama_status, warna');
+        $this->db->select('form_pengajuan.id, pembuat, tgl_lembur, status, nama_status, warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('nik_h', $nik);
@@ -192,7 +235,7 @@ class m_lembur extends CI_Model
 
     public function get_form_approve($status)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('form_pengajuan.status >=', $status);
@@ -202,7 +245,7 @@ class m_lembur extends CI_Model
 
     public function get_form_approve_efisiensi($status, $username)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('form_pengajuan.status >=', $status);
@@ -213,7 +256,7 @@ class m_lembur extends CI_Model
 
     public function get_form_approve_cc($status, $username)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('form_pengajuan.status >=', $status);
@@ -224,7 +267,7 @@ class m_lembur extends CI_Model
 
     public function get_form_approve_manager($manager, $username)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('form_pengajuan.manager', $manager);
@@ -235,7 +278,7 @@ class m_lembur extends CI_Model
 
     public function get_form_approve_ppc($status, $username)
     {
-        // $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        // $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         // $this->db->from('form_pengajuan');
         // $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         // $this->db->join('tb_grup_jabatan', 'tb_grup_jabatan.nik = form_pengajuan.nik_h');
@@ -245,7 +288,7 @@ class m_lembur extends CI_Model
         // $this->db->order_by('id', 'desc');
         // return $this->db->get()->result_array();
 
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('form_pengajuan.status >=', $status);
@@ -256,7 +299,7 @@ class m_lembur extends CI_Model
 
     public function get_form_lembur_admin()
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->order_by('id', 'desc');
@@ -265,7 +308,7 @@ class m_lembur extends CI_Model
 
     public function get_form_lembur_report()
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
@@ -276,7 +319,7 @@ class m_lembur extends CI_Model
 
     public function get_form_lembur_report_filter_tgl($tgl_mulai, $tgl_akhir)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
@@ -289,7 +332,7 @@ class m_lembur extends CI_Model
 
     public function get_form_lembur_report_filter($departemenpilih, $tgl_mulai, $tgl_akhir)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
@@ -303,7 +346,7 @@ class m_lembur extends CI_Model
 
     public function get_form_lembur_report_filter_dept($departemenpilih)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna, detail_form.nama_user, detail_form.nik, detail_form.departemen, detail_form.jam_mulai, detail_form.jam_selesai, detail_form.status_kar');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->join('detail_form', 'form_pengajuan.id = detail_form.id_form');
@@ -315,7 +358,7 @@ class m_lembur extends CI_Model
 
     public function get_form_approve_departemen($status, $departemen)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('tb_grup_jabatan', 'form_pengajuan.nik_h = tb_grup_jabatan.nik'); //+
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
@@ -327,7 +370,7 @@ class m_lembur extends CI_Model
 
     public function get_form_approve_departemen1($status, $departemen, $username)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('view_departemen_form', 'view_departemen_form.id_form = form_pengajuan.id');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
@@ -340,7 +383,7 @@ class m_lembur extends CI_Model
 
     public function get_form_hr($status)
     {
-        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.alasan, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
+        $this->db->select('form_pengajuan.id, form_pengajuan.pembuat, form_pengajuan.nik_h, form_pengajuan.status, form_pengajuan.tgl_lembur, status_f.nama_status, status_f.warna');
         $this->db->from('form_pengajuan');
         $this->db->join('status_f', 'form_pengajuan.status = status_f.id');
         $this->db->where('status', $status);
@@ -441,7 +484,7 @@ class m_lembur extends CI_Model
     function get_form_print($idform)
     {
         $db2 = $this->load->database('database_kedua', TRUE);
-        $this->db->select('form_pengajuan.id, pembuat, form_pengajuan.nik_h, alasan, no_order, tgl_lembur, dept, ppc, efisiensi, cc, manager, perpanjangan');
+        $this->db->select('form_pengajuan.id, pembuat, form_pengajuan.nik_h, tgl_lembur, dept, ppc, efisiensi, cc, manager, perpanjangan');
         $this->db->from('form_pengajuan');
         $this->db->join($db2->database . '.user', 'form_pengajuan.nik_h = user.nik');
         $this->db->where('form_pengajuan.id', $idform);

@@ -131,13 +131,11 @@ class Approval_1 extends CI_Controller
 
         $status_form = $this->session->userdata('status_form');
 
-
-
         $status = 0;
-
 
         $data['form'] = $this->m_lembur->get_form($idform);
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
+        $data['tarif'] = $this->m_lembur->get_tarif($idform);
 
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);
@@ -185,7 +183,7 @@ class Approval_1 extends CI_Controller
 
             $this->db->insert_batch('log_perubahan', $datatolak);
         }
-        // jika 
+        // jika di tolak semua
         if (!isset($_POST['jam_selesai'])) {
             $data3 = [
                 'status' => 9,
@@ -205,8 +203,11 @@ class Approval_1 extends CI_Controller
         $r = 0;
         foreach ($_POST['jam_selesai'] as $key => $val) {
 
-            if ($detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] || $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]) { // || $detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] && $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]
-
+            if ($detail_form[$key]['jam_mulai'] !== date("H:i:s", strtotime($_POST['jam_mulai'][$key])) || $detail_form[$key]['jam_selesai'] !== date("H:i:s", strtotime($_POST['jam_selesai'][$key]))) { // || $detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] && $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]
+                // var_dump('jam tidak sama');
+                // var_dump($detail_form[$key]['jam_mulai']);
+                // var_dump(date("H:i:s", strtotime($_POST['jam_mulai'][$key])));
+                // die;
                 $data_detail = [
                     'id_detail' => $detail_form[$key]['id'],
                     'id_form' => $detail_form[$key]['id_form'],

@@ -120,6 +120,7 @@ class Approval_ppc extends CI_Controller
 
         $data['form'] = $this->m_lembur->get_form($idform);
         $data['detail'] = $this->m_lembur->get_detail($idform, $status);
+        $data['tarif'] = $this->m_lembur->get_tarif($idform);
 
         $this->load->view('template/header', $data);
         $this->load->view('template/topbar', $data);
@@ -156,6 +157,9 @@ class Approval_ppc extends CI_Controller
                     'user_pic' => $user_pic
                 ];
 
+                // var_dump($datatolak);
+                // die;
+
                 $this->m_lembur->hapus_detail($_POST['id_detail_tolak'][$key]);
             }
 
@@ -178,7 +182,7 @@ class Approval_ppc extends CI_Controller
             redirect('Approval_ppc');
         }
         foreach ($_POST['jam_selesai'] as $key => $val) {
-            if ($detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] || $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]) { // || $detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] && $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]
+            if ($detail_form[$key]['jam_mulai'] !== date("H:i:s", strtotime($_POST['jam_mulai'][$key])) || $detail_form[$key]['jam_selesai'] !== date("H:i:s", strtotime($_POST['jam_selesai'][$key]))) { // || $detail_form[$key]['jam_mulai'] !== $_POST['jam_mulai'][$key] && $detail_form[$key]['jam_selesai'] !== $_POST['jam_selesai'][$key]
                 $data_detail = [
                     'id_detail' => $detail_form[$key]['id'],
                     'id_form' => $detail_form[$key]['id_form'],

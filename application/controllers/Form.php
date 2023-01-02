@@ -166,7 +166,8 @@ class Form extends CI_Controller
         // $data['form'] = $this->m_lembur->get_form($idform); 
         $data['form'] = $this->m_lembur->get_form_print($idform); //tak joinkan ke user
         $data['title'] = $idform;
-
+        // var_dump('hai');
+        // die;
         // $pembuat = $data['form']['nik'];
         $user = $this->m_lembur->get_departemen_form_cetak($idform);
 
@@ -439,5 +440,13 @@ class Form extends CI_Controller
 
         $tambah_log = $this->m_lembur->insert_log($data);
         $this->m_lembur->hapus_detail($id_detail);
+    }
+
+    function tambah_hapus()
+    {
+        $iddetail = $this->input->post('iddetail');
+        // $user_pic = $this->session->userdata('nik');
+
+        $this->m_lembur->hapus_detail($iddetail);
     }
 }
